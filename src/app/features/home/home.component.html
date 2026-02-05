@@ -1,0 +1,77 @@
+<section class="hero">
+  <div class="container hero__container">
+    <div class="hero__content">
+      <h1 class="hero__title">
+        Tu tranquilidad,<br />
+        <span class="text-primary">al toque.</span>
+      </h1>
+      <p class="hero__subtitle">
+        Asesoramiento personalizado en seguros. Encontrá la mejor cobertura para lo que más querés.
+      </p>
+      <div class="hero__actions">
+        <a routerLink="/cotizar" class="btn btn--primary">Cotizar Ahora</a>
+        <a routerLink="/contacto" class="btn btn--outline">Contactar Asesor</a>
+      </div>
+    </div>
+    <div class="hero__image">
+      <!-- Placeholder for hero image, using a div or asking user for asset later -->
+      <div class="hero__image-placeholder">
+        <img src="assets/home.png" alt="Seguros Al Toque" onerror="this.style.display = 'none'" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features section">
+  <div class="container">
+    <div class="features__grid">
+      <div class="feature-card">
+        <div class="feature-card__icon">⚡</div>
+        <h3 class="feature-card__title">Rápido y Fácil</h3>
+        <p>Cotizá y contratá 100% online, sin vueltas.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card__icon">🤝</div>
+        <h3 class="feature-card__title">Trato Humano</h3>
+        <p>Expertos listos para ayudarte vía WhatsApp.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card__icon">🛡️</div>
+        <h3 class="feature-card__title">Mejor Respaldo</h3>
+        <p>Trabajamos con las compañías líderes del mercado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="insurance-types section bg-light">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">Nuestras Coberturas</h2>
+      <p class="section-subtitle">Elegí el seguro que necesitás</p>
+    </div>
+
+    <div class="insurance-grid">
+      @for (item of insuranceTypes; track item.title) {
+        <a [routerLink]="[item.link]" [queryParams]="item.queryParams" class="insurance-card">
+          <div class="insurance-card__icon">{{ item.icon }}</div>
+          <h3 class="insurance-card__title">{{ item.title }}</h3>
+          <p class="insurance-card__desc">{{ item.desc }}</p>
+          <div class="insurance-card__arrow">→</div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="cta section">
+  <div class="container">
+    <div class="cta__box">
+      <h2>¿Tenés dudas?</h2>
+      <p>Habla con un asesor especializado ahora mismo.</p>
+      <a href="https://wa.me/5491112345678" target="_blank" class="btn btn--accent">
+        Chat por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,89 @@
+<section class="quote-section">
+  <div class="container">
+    <div class="form-card">
+      @if (submitted()) {
+        <div class="success-message text-center">
+          <div class="success-icon">✅</div>
+          <h2>¡Gracias por tu consulta!</h2>
+          <p>Un asesor se pondrá en contacto con vos a la brevedad.</p>
+          <button class="btn btn--primary" (click)="submitted.set(false); quoteForm.reset()">
+            Nueva Cotización
+          </button>
+        </div>
+      } @else {
+        <div class="form-header text-center">
+          <h2>Cotizá tu Seguro</h2>
+          <p>Completá el formulario y recibí la mejor propuesta.</p>
+        </div>
+
+        <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()" class="quote-form">
+          <div class="form-group">
+            <label for="name">Nombre Completo</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-input"
+              placeholder="Juan Perez"
+            />
+            @if (quoteForm.get('name')?.invalid && quoteForm.get('name')?.touched) {
+              <span class="error-msg">Requerido</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-input"
+              placeholder="juan@email.com"
+            />
+            @if (quoteForm.get('email')?.invalid && quoteForm.get('email')?.touched) {
+              <span class="error-msg">Email inválido</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Teléfono (WhatsApp)</label>
+            <input
+              type="tel"
+              id="phone"
+              formControlName="phone"
+              class="form-input"
+              placeholder="11 1234 5678"
+            />
+            @if (quoteForm.get('phone')?.invalid && quoteForm.get('phone')?.touched) {
+              <span class="error-msg">Requerido</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="insuranceType">Tipo de Seguro</label>
+            <select id="insuranceType" formControlName="insuranceType" class="form-select">
+              @for (type of insuranceTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="message">Mensaje Adicional</label>
+            <textarea
+              id="message"
+              formControlName="message"
+              class="form-textarea"
+              rows="4"
+              placeholder="Contanos más detalles..."
+            ></textarea>
+          </div>
+
+          <div class="form-actions full-width">
+            <button type="submit" class="btn btn--primary btn--block">Solicitar Cotización</button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</section>
