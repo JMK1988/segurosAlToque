@@ -2,64 +2,85 @@
   <div class="container hero__container">
     <div class="hero__content">
       <h1 class="hero__title">
-        Tu tranquilidad,<br />
-        <span class="text-primary">al toque.</span>
+        Seguros Al Toque® <br />
+        <span class="text-primary-highlight">El mejor precio, siempre.</span>
       </h1>
       <p class="hero__subtitle">
-        Asesoramiento personalizado en seguros. Encontrá la mejor cobertura para lo que más querés.
+        Seguros de manera ágil y personalizada, con asesoramiento claro y humano.
       </p>
       <div class="hero__actions">
-        <a routerLink="/cotizar" class="btn btn--primary">Cotizar Ahora</a>
-        <a routerLink="/contacto" class="btn btn--outline">Contactar Asesor</a>
+        <a routerLink="/cotizar" class="btn btn--primary">
+          <hugeicons-icon [icon]="calculateIcon" [size]="20" [strokeWidth]="2"></hugeicons-icon>
+          Cotizar Seguro
+        </a>
+        <a routerLink="/contacto" class="btn btn--outline">
+          <hugeicons-icon [icon]="headsetIcon" [size]="20" [strokeWidth]="2"></hugeicons-icon>
+          Contactar Asesor
+        </a>
       </div>
     </div>
-    <div class="hero__image">
-      <!-- Placeholder for hero image, using a div or asking user for asset later -->
-      <div class="hero__image-placeholder">
-        <img src="assets/home.png" alt="Seguros Al Toque" onerror="this.style.display = 'none'" />
-      </div>
-    </div>
+
   </div>
 </section>
 
 <section class="features section">
   <div class="container">
+    <div class="section-header text-center">
+      <h2 class="section-title">¿Por qué elegirnos?</h2>
+      <p class="section-subtitle">
+        Más de 15 años brindando tranquilidad y soluciones personalizadas.
+      </p>
+    </div>
+
     <div class="features__grid">
+      @for (feature of features; track feature.title) {
       <div class="feature-card">
-        <div class="feature-card__icon">⚡</div>
-        <h3 class="feature-card__title">Rápido y Fácil</h3>
-        <p>Cotizá y contratá 100% online, sin vueltas.</p>
+        <div class="feature-card__icon">
+          <hugeicons-icon [icon]="feature.icon" [size]="48" [strokeWidth]="1.5"
+            color="var(--color-primary)"></hugeicons-icon>
+        </div>
+        <h3 class="feature-card__title">{{ feature.title }}</h3>
+        <p class="feature-card__desc">{{ feature.desc }}</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-card__icon">🤝</div>
-        <h3 class="feature-card__title">Trato Humano</h3>
-        <p>Expertos listos para ayudarte vía WhatsApp.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-card__icon">🛡️</div>
-        <h3 class="feature-card__title">Mejor Respaldo</h3>
-        <p>Trabajamos con las compañías líderes del mercado.</p>
-      </div>
+      }
     </div>
   </div>
 </section>
 
-<section class="insurance-types section bg-light">
+<section class="insurance-type section bg-light bg-dots">
   <div class="container">
-    <div class="section-header text-center">
+    <div class="section-header text-between">
       <h2 class="section-title">Nuestras Coberturas</h2>
-      <p class="section-subtitle">Elegí el seguro que necesitás</p>
+      <p class="section-subtitle">
+        Encuentra el seguro perfecto para cada área de tu vida.
+      </p>
+      <a routerLink="/cotizar" class="link-arrow hide-mobile">
+        Ver todos los seguros <span>→</span>
+      </a>
     </div>
 
     <div class="insurance-grid">
       @for (item of insuranceTypes; track item.title) {
-        <a [routerLink]="[item.link]" [queryParams]="item.queryParams" class="insurance-card">
-          <div class="insurance-card__icon">{{ item.icon }}</div>
+      <div class="insurance-card">
+        <div class="insurance-card__icon-wrapper">
+          <hugeicons-icon [icon]="item.icon" [size]="64" [strokeWidth]="1.5"
+            color="var(--color-secondary)"></hugeicons-icon>
+        </div>
+        <div class="insurance-card__content">
           <h3 class="insurance-card__title">{{ item.title }}</h3>
           <p class="insurance-card__desc">{{ item.desc }}</p>
-          <div class="insurance-card__arrow">→</div>
-        </a>
+          <a [routerLink]="[item.link]" [queryParams]="item.queryParams" class="insurance-card__link">
+            Ver detalles <span>›</span>
+          </a>
+        </div>
+      </div>
       }
+    </div>
+
+    <div class="show-mobile text-center mt-4">
+      <a routerLink="/cotizar" class="link-arrow">
+        Ver todos los seguros <span>→</span>
+      </a>
     </div>
   </div>
 </section>
@@ -67,11 +88,18 @@
 <section class="cta section">
   <div class="container">
     <div class="cta__box">
-      <h2>¿Tenés dudas?</h2>
-      <p>Habla con un asesor especializado ahora mismo.</p>
-      <a href="https://wa.me/5491112345678" target="_blank" class="btn btn--accent">
-        Chat por WhatsApp
+      <h2 class="cta__title">¿Listo para sentirte seguro?</h2>
+      <p class="cta__text">
+        Solicitá una asesoría sin cargo y descubrí cómo podemos proteger lo que
+        más querés.
+      </p>
+      <a routerLink="/cotizar" class="btn btn--white btn--lg">
+        Empezar Cotización
       </a>
     </div>
   </div>
 </section>
+
+<a href="https://wa.me/5491136793646" target="_blank" class="whatsapp-float hover-scale" aria-label="Chat en WhatsApp">
+  <hugeicons-icon [icon]="whatsappIcon" [size]="32" [strokeWidth]="2" color="#ffffff"></hugeicons-icon>
+</a>

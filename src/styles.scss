@@ -6,10 +6,10 @@ $font-body: 'Inter', sans-serif;
   /* Colors */
   --color-primary: #0f172a;
   --color-primary-light: #1e293b;
-  --color-secondary: #3b82f6;
-  --color-secondary-dark: #2563eb;
-  --color-accent: #10b981;
-  --color-accent-dark: #059669;
+  --color-secondary: #3872b3;
+  --color-secondary-dark: #255285;
+  --color-accent: #c0daed;
+  --color-accent-dark: #3872b3;
 
   --color-text-main: #1e293b;
   --color-text-muted: #64748b;
@@ -93,9 +93,11 @@ button {
 .text-center {
   text-align: center;
 }
+
 .text-primary {
   color: var(--color-secondary);
 }
+
 .text-accent {
   color: var(--color-accent);
 }
@@ -103,21 +105,27 @@ button {
 .flex {
   display: flex;
 }
+
 .flex-col {
   flex-direction: column;
 }
+
 .items-center {
   align-items: center;
 }
+
 .justify-center {
   justify-content: center;
 }
+
 .justify-between {
   justify-content: space-between;
 }
+
 .gap-sm {
   gap: var(--spacing-sm);
 }
+
 .gap-md {
   gap: var(--spacing-md);
 }

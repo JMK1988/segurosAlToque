@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="container navbar__container">
     <a routerLink="/" class="navbar__logo">
-      <span class="navbar__logo-text">Seguros<span class="text-accent">AlToque</span></span>
+      <img src="logo.jpeg" alt="Seguros Al Toque" class="navbar__logo-img" />
     </a>
 
     <!-- Hamburger Menu Button -->
@@ -12,31 +12,21 @@
     </button>
 
     <div class="navbar__links" [class.navbar__links--open]="isMenuOpen()">
-      <a
-        routerLink="/"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="navbar__link"
-        (click)="closeMenu()"
-        >Inicio</a
-      >
-      <a routerLink="/seguros" routerLinkActive="active" class="navbar__link" (click)="closeMenu()"
-        >Seguros</a
-      >
-      <a routerLink="/contacto" routerLinkActive="active" class="navbar__link" (click)="closeMenu()"
-        >Contacto</a
-      >
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="navbar__link"
+        (click)="closeMenu()">Inicio</a>
+      <a routerLink="/seguros" routerLinkActive="active" class="navbar__link" (click)="closeMenu()">Seguros</a>
+      <a routerLink="/contacto" routerLinkActive="active" class="navbar__link" (click)="closeMenu()">Contacto</a>
 
       <!-- Mobile only action -->
       <div class="navbar__mobile-action">
-        <a href="https://wa.me/5491112345678" target="_blank" class="btn btn--primary btn--block">
+        <a href="https://wa.me/5491136793646" target="_blank" class="btn btn--primary btn--block">
           Whatsapp
         </a>
       </div>
     </div>
 
     <div class="navbar__actions desktop-only">
-      <a href="https://wa.me/5491112345678" target="_blank" class="btn btn--primary"> Whatsapp </a>
+      <a href="https://wa.me/5491136793646" target="_blank" class="btn btn--primary"> Whatsapp </a>
     </div>
   </div>
 </nav>

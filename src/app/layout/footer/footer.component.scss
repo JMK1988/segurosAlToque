@@ -10,13 +10,7 @@
     padding-bottom: 3rem;
   }
 
-  &__logo {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--color-text-inverted);
-  }
+
 
   &__desc {
     color: #94a3b8;
@@ -37,6 +31,7 @@
 
   &__link {
     color: #94a3b8;
+
     &:hover {
       color: var(--color-accent);
     }

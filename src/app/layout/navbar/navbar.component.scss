@@ -14,11 +14,15 @@
   }
 
   &__logo {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-primary);
+    display: flex;
+    align-items: center;
     z-index: 1001;
+  }
+
+  &__logo-img {
+    height: 48px; // 40-50px is a good standard height
+    width: auto;
+    object-fit: contain;
   }
 
   &__toggle {
@@ -40,9 +44,11 @@
         &:nth-child(1) {
           transform: translateY(9px) rotate(45deg);
         }
+
         &:nth-child(2) {
           opacity: 0;
         }
+
         &:nth-child(3) {
           transform: translateY(-9px) rotate(-45deg);
         }
