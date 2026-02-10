@@ -77,6 +77,20 @@ $text-muted: var(--color-text-muted);
       }
     }
   }
+
+  .hero-quote-widget {
+    margin-top: 4rem;
+    width: 100%;
+    margin-bottom: -6rem;
+    position: relative;
+    z-index: 20;
+
+    @media (max-width: 768px) {
+      margin-top: 3rem;
+      margin-bottom: -3rem;
+      padding: 0 1rem;
+    }
+  }
 }
 
 .hero__image-wrapper {
@@ -150,7 +164,11 @@ $text-muted: var(--color-text-muted);
 // Features Section
 .features {
   background-color: #fff;
-  padding: 5rem 0;
+  padding: 11rem 0 5rem;
+
+  @media (max-width: 768px) {
+    padding: 7rem 0 4rem;
+  }
 }
 
 .section-header {

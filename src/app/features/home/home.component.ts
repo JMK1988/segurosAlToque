@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
+import { CarQuoteComponent } from './components/car-quote/car-quote.component';
 import { RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { HugeiconsIconComponent } from '@hugeicons/angular';
@@ -29,7 +30,7 @@ import {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, HugeiconsIconComponent],
+  imports: [RouterLink, HugeiconsIconComponent, CarQuoteComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
