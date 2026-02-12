@@ -1,58 +1,58 @@
 <div class="quote-card">
-    <div class="quote-header">
-        <div class="quote-icon">
-            <hugeicons-icon [icon]="carIcon" [size]="24" [strokeWidth]="2"></hugeicons-icon>
-        </div>
-        <h3>Cotizá tu Auto</h3>
-        <span class="badge">Mejor Precio</span>
+  <div class="quote-header">
+    <div class="quote-icon">
+      <hugeicons-icon [icon]="carIcon" [size]="24" [strokeWidth]="1.5"></hugeicons-icon>
+    </div>
+    <h3>Cotizá tu Auto</h3>
+    <span class="badge">Mejor Precio</span>
+  </div>
+
+  <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()" class="quote-form">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Marca</label>
+        <select formControlName="brand">
+          <option value="" disabled selected>Seleccioná marca</option>
+          @for (brand of brands; track brand) {
+            <option [value]="brand">{{ brand }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Año</label>
+        <select formControlName="year">
+          <option value="" disabled selected>Año</option>
+          @for (year of years; track year) {
+            <option [value]="year">{{ year }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Modelo</label>
+        <select formControlName="model" [disabled]="!quoteForm.get('brand')?.value">
+          <option value="" disabled selected>Modelo</option>
+          @for (model of models; track model) {
+            <option [value]="model">{{ model }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Versión</label>
+        <select formControlName="version" [disabled]="!quoteForm.get('model')?.value">
+          <option value="" disabled selected>Versión</option>
+          @for (ver of versions; track ver) {
+            <option [value]="ver">{{ ver }}</option>
+          }
+        </select>
+      </div>
     </div>
 
-    <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()" class="quote-form">
-        <div class="form-grid">
-            <div class="form-group">
-                <label>Marca</label>
-                <select formControlName="brand">
-                    <option value="" disabled selected>Seleccioná marca</option>
-                    @for (brand of brands; track brand) {
-                    <option [value]="brand">{{ brand }}</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Año</label>
-                <select formControlName="year">
-                    <option value="" disabled selected>Año</option>
-                    @for (year of years; track year) {
-                    <option [value]="year">{{ year }}</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Modelo</label>
-                <select formControlName="model" [disabled]="!quoteForm.get('brand')?.value">
-                    <option value="" disabled selected>Modelo</option>
-                    @for (model of models; track model) {
-                    <option [value]="model">{{ model }}</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Versión</label>
-                <select formControlName="version" [disabled]="!quoteForm.get('model')?.value">
-                    <option value="" disabled selected>Versión</option>
-                    @for (ver of versions; track ver) {
-                    <option [value]="ver">{{ ver }}</option>
-                    }
-                </select>
-            </div>
-        </div>
-
-        <button type="submit" [disabled]="!quoteForm.valid" class="btn-submit">
-            <span>Ver Precio</span>
-            <hugeicons-icon [icon]="arrowRightIcon" [size]="20" [strokeWidth]="2"></hugeicons-icon>
-        </button>
-    </form>
+    <button type="submit" [disabled]="!quoteForm.valid" class="btn-submit">
+      <span>Ver Precio</span>
+      <hugeicons-icon [icon]="arrowRightIcon" [size]="20" [strokeWidth]="1.5"></hugeicons-icon>
+    </button>
+  </form>
 </div>

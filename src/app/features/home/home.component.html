@@ -10,11 +10,11 @@
       </p>
       <div class="hero__actions">
         <a routerLink="/cotizar" class="btn btn--primary">
-          <hugeicons-icon [icon]="calculateIcon" [size]="20" [strokeWidth]="2"></hugeicons-icon>
+          <hugeicons-icon [icon]="calculateIcon" [size]="20" [strokeWidth]="1.5"></hugeicons-icon>
           Cotizar Seguro
         </a>
         <a routerLink="/contacto" class="btn btn--outline">
-          <hugeicons-icon [icon]="headsetIcon" [size]="20" [strokeWidth]="2"></hugeicons-icon>
+          <hugeicons-icon [icon]="headsetIcon" [size]="20" [strokeWidth]="1.5"></hugeicons-icon>
           Contactar Asesor
         </a>
       </div>
@@ -35,14 +35,18 @@
 
     <div class="features__grid">
       @for (feature of features; track feature.title) {
-      <div class="feature-card">
-        <div class="feature-card__icon">
-          <hugeicons-icon [icon]="feature.icon" [size]="48" [strokeWidth]="1.5"
-            color="var(--color-primary)"></hugeicons-icon>
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <hugeicons-icon
+              [icon]="feature.icon"
+              [size]="48"
+              [strokeWidth]="1.5"
+              color="var(--color-primary)"
+            ></hugeicons-icon>
+          </div>
+          <h3 class="feature-card__title">{{ feature.title }}</h3>
+          <p class="feature-card__desc">{{ feature.desc }}</p>
         </div>
-        <h3 class="feature-card__title">{{ feature.title }}</h3>
-        <p class="feature-card__desc">{{ feature.desc }}</p>
-      </div>
       }
     </div>
   </div>
@@ -52,9 +56,7 @@
   <div class="container">
     <div class="section-header text-between">
       <h2 class="section-title">Nuestras Coberturas</h2>
-      <p class="section-subtitle">
-        Encuentra el seguro perfecto para cada área de tu vida.
-      </p>
+      <p class="section-subtitle">Encuentra el seguro perfecto para cada área de tu vida.</p>
       <a routerLink="/cotizar" class="link-arrow hide-mobile">
         Ver todos los seguros <span>→</span>
       </a>
@@ -62,26 +64,32 @@
 
     <div class="insurance-grid">
       @for (item of insuranceTypes; track item.title) {
-      <div class="insurance-card">
-        <div class="insurance-card__icon-wrapper">
-          <hugeicons-icon [icon]="item.icon" [size]="64" [strokeWidth]="1.5"
-            color="var(--color-secondary)"></hugeicons-icon>
+        <div class="insurance-card">
+          <div class="insurance-card__icon-wrapper">
+            <hugeicons-icon
+              [icon]="item.icon"
+              [size]="64"
+              [strokeWidth]="1.5"
+              color="var(--color-secondary)"
+            ></hugeicons-icon>
+          </div>
+          <div class="insurance-card__content">
+            <h3 class="insurance-card__title">{{ item.title }}</h3>
+            <p class="insurance-card__desc">{{ item.desc }}</p>
+            <a
+              [routerLink]="[item.link]"
+              [queryParams]="item.queryParams"
+              class="insurance-card__link"
+            >
+              Ver detalles <span>›</span>
+            </a>
+          </div>
         </div>
-        <div class="insurance-card__content">
-          <h3 class="insurance-card__title">{{ item.title }}</h3>
-          <p class="insurance-card__desc">{{ item.desc }}</p>
-          <a [routerLink]="[item.link]" [queryParams]="item.queryParams" class="insurance-card__link">
-            Ver detalles <span>›</span>
-          </a>
-        </div>
-      </div>
       }
     </div>
 
     <div class="show-mobile text-center mt-4">
-      <a routerLink="/cotizar" class="link-arrow">
-        Ver todos los seguros <span>→</span>
-      </a>
+      <a routerLink="/cotizar" class="link-arrow"> Ver todos los seguros <span>→</span> </a>
     </div>
   </div>
 </section>
@@ -91,16 +99,23 @@
     <div class="cta__box">
       <h2 class="cta__title">¿Listo para sentirte seguro?</h2>
       <p class="cta__text">
-        Solicitá una asesoría sin cargo y descubrí cómo podemos proteger lo que
-        más querés.
+        Solicitá una asesoría sin cargo y descubrí cómo podemos proteger lo que más querés.
       </p>
-      <a routerLink="/cotizar" class="btn btn--white btn--lg">
-        Empezar Cotización
-      </a>
+      <a routerLink="/cotizar" class="btn btn--white btn--lg"> Empezar Cotización </a>
     </div>
   </div>
 </section>
 
-<a href="https://wa.me/5491136793646" target="_blank" class="whatsapp-float hover-scale" aria-label="Chat en WhatsApp">
-  <hugeicons-icon [icon]="whatsappIcon" [size]="32" [strokeWidth]="2" color="#ffffff"></hugeicons-icon>
+<a
+  href="https://wa.me/5491136793646"
+  target="_blank"
+  class="whatsapp-float hover-scale"
+  aria-label="Chat en WhatsApp"
+>
+  <hugeicons-icon
+    [icon]="whatsappIcon"
+    [size]="32"
+    [strokeWidth]="1.5"
+    color="#ffffff"
+  ></hugeicons-icon>
 </a>
