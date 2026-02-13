@@ -10,10 +10,12 @@
     <div class="footer__col">
       <h3 class="footer__title">Seguros</h3>
       <nav class="footer__nav">
-        <a routerLink="/seguros" class="footer__link">Autos</a>
-        <a routerLink="/seguros" class="footer__link">Hogar</a>
-        <a routerLink="/seguros" class="footer__link">Vida</a>
-        <a routerLink="/seguros" class="footer__link">ART</a>
+        <a routerLink="/" fragment="coberturas" [queryParams]="{ category: 'personal' }"
+          class="footer__link">Personales</a>
+        <a routerLink="/" fragment="coberturas" [queryParams]="{ category: 'professional' }"
+          class="footer__link">Profesionales</a>
+        <a routerLink="/" fragment="coberturas" [queryParams]="{ category: 'enterprise' }"
+          class="footer__link">Empresas</a>
       </nav>
     </div>
 

@@ -1,0 +1,18 @@
+<nav class="mobile-nav">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="mobile-nav__item">
+        <hugeicons-icon [icon]="homeIcon" [size]="24" [strokeWidth]="1.5"></hugeicons-icon>
+        <span>Inicio</span>
+    </a>
+
+    <a routerLink="/cotizar" routerLinkActive="active" class="mobile-nav__item mobile-nav__item--highlight">
+        <div class="highlight-circle">
+            <hugeicons-icon [icon]="quoteIcon" [size]="24" [strokeWidth]="1.5"></hugeicons-icon>
+        </div>
+        <span>Cotizar</span>
+    </a>
+
+    <a routerLink="/contacto" routerLinkActive="active" class="mobile-nav__item">
+        <hugeicons-icon [icon]="contactIcon" [size]="24" [strokeWidth]="1.5"></hugeicons-icon>
+        <span>Contacto</span>
+    </a>
+</nav>

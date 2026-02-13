@@ -1,6 +1,9 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal, effect } from '@angular/core';
 import { CarQuoteComponent } from './components/car-quote/car-quote.component';
-import { RouterLink } from '@angular/router';
+import { PersonalCoveragesComponent } from './components/personal-coverages/personal-coverages.component';
+import { ProfessionalCoveragesComponent } from './components/professional-coverages/professional-coverages.component';
+import { EnterpriseCoveragesComponent } from './components/enterprise-coverages/enterprise-coverages.component';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { HugeiconsIconComponent } from '@hugeicons/angular';
 import {
@@ -10,27 +13,25 @@ import {
   CalculateIcon,
   Award01Icon,
   WhatsappIcon,
-  Car01Icon,
-  Motorbike01Icon,
-  Car02Icon,
-  TaxiIcon,
   House01Icon,
-  Building04Icon,
-  HealthIcon,
-  BankIcon,
-  Airplane01Icon,
-  Key01Icon,
-  SmartPhone01Icon,
-  DeliveryTruck01Icon,
   Briefcase01Icon,
-  Plant01Icon,
-  ShippingTruck01Icon,
+  Building04Icon,
 } from '@hugeicons/core-free-icons';
+
+import { FadeInDirective } from '../../directives/fade-in.directive';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, HugeiconsIconComponent, CarQuoteComponent],
+  imports: [
+    RouterLink,
+    HugeiconsIconComponent,
+    CarQuoteComponent,
+    PersonalCoveragesComponent,
+    ProfessionalCoveragesComponent,
+    EnterpriseCoveragesComponent,
+    FadeInDirective,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +39,38 @@ import {
 export class HomeComponent implements OnInit {
   private meta = inject(Meta);
   private titleService = inject(Title);
+  private route = inject(ActivatedRoute);
+
+  selectedCategory = signal<'personal' | 'professional' | 'enterprise' | null>(null);
+
+  constructor() {
+    // Listen for query params to set initial category selection
+    this.route.queryParams.subscribe((params) => {
+      const category = params['category'];
+      if (category && ['personal', 'professional', 'enterprise'].includes(category)) {
+        this.selectedCategory.set(category as 'personal' | 'professional' | 'enterprise');
+
+        // Scroll to coverages if we are navigating via category change
+        // We use a small timeout to let the view update if needed, and to ensure the scroll happens after navigation
+        setTimeout(() => {
+          const element = document.getElementById('coberturas');
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      }
+    });
+
+    // Listen for fragments to scroll to section
+    this.route.fragment.subscribe((fragment) => {
+      if (fragment) {
+        const element = document.getElementById(fragment);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  }
 
   ngOnInit() {
     this.titleService.setTitle('Seguros Al Toque | El mejor precio, siempre.');
@@ -72,111 +105,38 @@ export class HomeComponent implements OnInit {
     },
   ];
 
-  insuranceTypes = [
+  categories = [
     {
-      title: 'Autos',
-      desc: 'Protección completa para tu vehículo particular.',
-      icon: Car01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Autos' },
-    },
-    {
-      title: 'Motos',
-      desc: 'Seguridad para vos y tu motocicleta.',
-      icon: Motorbike01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Motos' },
-    },
-    {
-      title: 'Autos Clásicos',
-      desc: 'Cuidado especial para vehículos de colección.',
-      icon: Car02Icon,
-      link: '/cotizar',
-      queryParams: { type: 'AutosClasicos' },
-    },
-    {
-      title: 'Taxi / Remis',
-      desc: 'Cobertura específica para transporte de pasajeros.',
-      icon: TaxiIcon,
-      link: '/cotizar',
-      queryParams: { type: 'TaxiRemis' },
-    },
-    {
-      title: 'Hogar',
-      desc: 'Protegé tu casa y tus bienes más preciados.',
+      id: 'personal',
+      title: 'Personales',
+      desc: 'Protegé lo que más querés: tu auto, tu casa, tu familia.',
       icon: House01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Hogar' },
     },
     {
-      title: 'Comercio',
-      desc: 'Respaldo integral para tu negocio.',
+      id: 'professional',
+      title: 'Profesionales',
+      desc: 'Respaldamos tu actividad profesional e independiente.',
+      icon: Briefcase01Icon, // Using Briefcase for Professional
+    },
+    {
+      id: 'enterprise',
+      title: 'Empresas',
+      desc: 'Soluciones integrales para pymes y grandes empresas.',
       icon: Building04Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Comercio' },
-    },
-    {
-      title: 'Accidentes Personales',
-      desc: 'Cobertura ante imprevistos para trabajadores.',
-      icon: HealthIcon,
-      link: '/cotizar',
-      queryParams: { type: 'AccidentesPersonales' },
-    },
-    {
-      title: 'Retiro y Ahorro',
-      desc: 'Planificá tu futuro con seguridad financiera.',
-      icon: BankIcon,
-      link: '/cotizar',
-      queryParams: { type: 'RetiroAhorro' },
-    },
-    {
-      title: 'Asistencia al Viajero',
-      desc: 'Viajá tranquilo con cobertura médica mundial.',
-      icon: Airplane01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'AsistenciaViajero' },
-    },
-    {
-      title: 'Alquiler',
-      desc: 'Garantías y seguros para inquilinos y propietarios.',
-      icon: Key01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Alquiler' },
-    },
-    {
-      title: 'Celular',
-      desc: 'Asegurá tu smartphone contra robo y daños.',
-      icon: SmartPhone01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Celular' },
-    },
-    {
-      title: 'Flotas',
-      desc: 'Soluciones corporativas para múltiples vehículos.',
-      icon: DeliveryTruck01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Flotas' },
-    },
-    {
-      title: 'ART',
-      desc: 'Riesgos del trabajo para empresas y empleados.',
-      icon: Briefcase01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'ART' },
-    },
-    {
-      title: 'Agro',
-      desc: 'Cobertura para el campo, cosechas y maquinaria.',
-      icon: Plant01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Agro' },
-    },
-    {
-      title: 'Transporte',
-      desc: 'Seguridad para tu carga y logística.',
-      icon: ShippingTruck01Icon,
-      link: '/cotizar',
-      queryParams: { type: 'Transporte' },
     },
   ];
+
+  stats = [
+    { value: '+10', label: 'Años de Trayectoria', icon: Award01Icon },
+    { value: '+10k', label: 'Clientes Asegurados', icon: Shield01Icon },
+    { value: '24/7', label: 'Atención y Emergencias', icon: HeadsetIcon },
+  ];
+
+  selectCategory(category: 'personal' | 'professional' | 'enterprise') {
+    this.selectedCategory.set(category);
+  }
+
+  clearSelection() {
+    this.selectedCategory.set(null);
+  }
 }

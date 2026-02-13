@@ -35,24 +35,38 @@
 
     <div class="features__grid">
       @for (feature of features; track feature.title) {
-        <div class="feature-card">
-          <div class="feature-card__icon">
-            <hugeicons-icon
-              [icon]="feature.icon"
-              [size]="48"
-              [strokeWidth]="1.5"
-              color="var(--color-primary)"
-            ></hugeicons-icon>
-          </div>
-          <h3 class="feature-card__title">{{ feature.title }}</h3>
-          <p class="feature-card__desc">{{ feature.desc }}</p>
+      <div class="feature-card">
+        <div class="feature-card__icon">
+          <hugeicons-icon [icon]="feature.icon" [size]="48" [strokeWidth]="1.5"
+            color="var(--color-primary)"></hugeicons-icon>
         </div>
+        <h3 class="feature-card__title">{{ feature.title }}</h3>
+        <p class="feature-card__desc">{{ feature.desc }}</p>
+      </div>
       }
     </div>
   </div>
 </section>
 
-<section class="insurance-type section bg-light bg-dots">
+<section class="metrics section bg-primary">
+  <div class="container">
+    <div class="metrics__grid">
+      @for (stat of stats; track stat.label) {
+      <div class="metric-card" appFadeIn>
+        <div class="metric-card__icon">
+          <hugeicons-icon [icon]="stat.icon" [size]="48" [strokeWidth]="1.5" color="#ffffff"></hugeicons-icon>
+        </div>
+        <div>
+          <p class="metric-card__value">{{ stat.value }}</p>
+          <p class="metric-card__label">{{ stat.label }}</p>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="insurance-type section bg-light bg-dots" id="coberturas">
   <div class="container">
     <div class="section-header text-between">
       <h2 class="section-title">Nuestras Coberturas</h2>
@@ -62,31 +76,36 @@
       </a>
     </div>
 
+    @if (!selectedCategory()) {
     <div class="insurance-grid">
-      @for (item of insuranceTypes; track item.title) {
-        <div class="insurance-card">
-          <div class="insurance-card__icon-wrapper">
-            <hugeicons-icon
-              [icon]="item.icon"
-              [size]="64"
-              [strokeWidth]="1.5"
-              color="var(--color-secondary)"
-            ></hugeicons-icon>
-          </div>
-          <div class="insurance-card__content">
-            <h3 class="insurance-card__title">{{ item.title }}</h3>
-            <p class="insurance-card__desc">{{ item.desc }}</p>
-            <a
-              [routerLink]="[item.link]"
-              [queryParams]="item.queryParams"
-              class="insurance-card__link"
-            >
-              Ver detalles <span>›</span>
-            </a>
-          </div>
+      @for (item of categories; track item.id) {
+      <div class="insurance-card cursor-pointer" (click)="selectCategory($any(item.id))" appFadeIn>
+        <div class="insurance-card__icon-wrapper">
+          <hugeicons-icon [icon]="item.icon" [size]="64" [strokeWidth]="1.5"
+            color="var(--color-secondary)"></hugeicons-icon>
         </div>
+        <div class="insurance-card__content">
+          <h3 class="insurance-card__title">{{ item.title }}</h3>
+          <p class="insurance-card__desc">{{ item.desc }}</p>
+          <button class="insurance-card__link btn-link"
+            (click)="selectCategory($any(item.id)); $event.stopPropagation()">
+            Ver opciones <span>›</span>
+          </button>
+        </div>
+      </div>
       }
     </div>
+    } @else {
+    @if (selectedCategory() === 'personal') {
+    <app-personal-coverages (goBack)="clearSelection()"></app-personal-coverages>
+    }
+    @if (selectedCategory() === 'professional') {
+    <app-professional-coverages (goBack)="clearSelection()"></app-professional-coverages>
+    }
+    @if (selectedCategory() === 'enterprise') {
+    <app-enterprise-coverages (goBack)="clearSelection()"></app-enterprise-coverages>
+    }
+    }
 
     <div class="show-mobile text-center mt-4">
       <a routerLink="/cotizar" class="link-arrow"> Ver todos los seguros <span>→</span> </a>
@@ -106,16 +125,6 @@
   </div>
 </section>
 
-<a
-  href="https://wa.me/5491136793646"
-  target="_blank"
-  class="whatsapp-float hover-scale"
-  aria-label="Chat en WhatsApp"
->
-  <hugeicons-icon
-    [icon]="whatsappIcon"
-    [size]="32"
-    [strokeWidth]="1.5"
-    color="#ffffff"
-  ></hugeicons-icon>
+<a href="https://wa.me/5491136793646" target="_blank" class="whatsapp-float hover-scale" aria-label="Chat en WhatsApp">
+  <hugeicons-icon [icon]="whatsappIcon" [size]="32" [strokeWidth]="1.5" color="#ffffff"></hugeicons-icon>
 </a>

@@ -1,47 +1,65 @@
-You are an expert in TypeScript, Angular, and scalable web application development. You write maintainable, performant, and accessible code following Angular and TypeScript best practices.
+Eres un experto en TypeScript, Angular y desarrollo de aplicaciones web escalables. Escribes código mantenible, de alto rendimiento y accesible, siguiendo las mejores prácticas de Angular y TypeScript. Tus respuestas deben ser siempre en español.
 
-## TypeScript Best Practices
+Mejores Prácticas de TypeScript
+Usa strict type checking.
 
-- Use strict type checking
-- Prefer type inference when the type is obvious
-- Avoid the `any` type; use `unknown` when type is uncertain
+Prefiere la inferencia de tipos cuando el tipo sea obvio.
 
-## Angular Best Practices
+Evita el tipo any; usa unknown cuando el tipo sea incierto.
 
-- Always use standalone components over NgModules
-- Must NOT set `standalone: true` inside Angular decorators. It's the default.
-- Use signals for state management
-- Implement lazy loading for feature routes
-- Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
-- Use `NgOptimizedImage` for all static images.
-  - `NgOptimizedImage` does not work for inline base64 images.
+Mejores Prácticas de Angular
+Usa siempre standalone components en lugar de NgModules.
 
-## Components
+NO debes establecer standalone: true dentro de los decoradores de Angular. Es el valor por defecto.
 
-- Keep components small and focused on a single responsibility
-- Use `input()` and `output()` functions instead of decorators
-- Use `computed()` for derived state
-- Set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator
-- Prefer inline templates for small components
-- Prefer Reactive forms instead of Template-driven ones
-- Do NOT use `ngClass`, use `class` bindings instead
-- Do NOT use `ngStyle`, use `style` bindings instead
+Usa signals para la gestión de estado.
 
-## State Management
+Implementa lazy loading para las rutas de funcionalidades (feature routes).
 
-- Use signals for local component state
-- Use `computed()` for derived state
-- Keep state transformations pure and predictable
-- Do NOT use `mutate` on signals, use `update` or `set` instead
+NO uses los decoradores @HostBinding ni @HostListener. Define los host bindings dentro del objeto host en el decorador @Component o @Directive.
 
-## Templates
+Usa NgOptimizedImage para todas las imágenes estáticas.
 
-- Keep templates simple and avoid complex logic
-- Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
-- Use the async pipe to handle observables
+Ten en cuenta que NgOptimizedImage no funciona para imágenes base64 incrustadas.
 
-## Services
+Componentes
+Mantén los componentes pequeños y enfocados en una única responsabilidad.
 
-- Design services around a single responsibility
-- Use the `providedIn: 'root'` option for singleton services
-- Use the `inject()` function instead of constructor injection
+los componentes deben estar separados en html, sass/css y ts
+
+Usa las funciones input() y output() en lugar de los decoradores antiguos.
+
+Usa computed() para el estado derivado.
+
+Configura changeDetection: ChangeDetectionStrategy.OnPush en el decorador @Component.
+
+Prefiere inline templates para componentes pequeños.
+
+Prefiere Reactive Forms en lugar de Template-driven forms.
+
+NO uses ngClass; utiliza class bindings en su lugar (ej. [class.nombre]="condicion").
+
+NO uses ngStyle; utiliza style bindings en su lugar.
+
+Gestión de Estado
+Usa signals para el estado local del componente.
+
+Usa computed() para transformaciones de estado.
+
+Mantén las transformaciones de estado puras y predecibles.
+
+NO uses mutate en las signals; usa update o set en su lugar.
+
+Plantillas (Templates)
+Mantén las plantillas simples y evita lógica compleja.
+
+Usa el flujo de control nativo (@if, @for, @switch) en lugar de *ngIf, *ngFor o *ngSwitch.
+
+Usa el async pipe para manejar Observables.
+
+Servicios
+Diseña los servicios en torno a una única responsabilidad.
+
+Usa la opción providedIn: 'root' para servicios singleton.
+
+Usa la función inject() en lugar de la inyección por constructor.

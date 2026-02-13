@@ -1,0 +1,82 @@
+<div class="modal-overlay" (click)="close.emit()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="close.emit()">×</button>
+
+        <h2 class="modal-title">Compará nuestros planes</h2>
+        <p class="modal-subtitle">Elegí la cobertura que mejor se adapte a tus necesidades.</p>
+
+        <div class="table-container">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Cobertura</th>
+                        <th class="plan-header basic">
+                            <span class="plan-name">Básico</span>
+                            <span class="plan-price">Desde $15.000</span>
+                        </th>
+                        <th class="plan-header standard recommended">
+                            <div class="recommended-badge">Recomendado</div>
+                            <span class="plan-name">Terceros Completo</span>
+                            <span class="plan-price">Desde $28.000</span>
+                        </th>
+                        <th class="plan-header premium">
+                            <span class="plan-name">Todo Riesgo</span>
+                            <span class="plan-price">Desde $45.000</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (row of coverages; track row.name) {
+                    <tr>
+                        <td class="feature-name">{{ row.name }}</td>
+
+                        <!-- Basic -->
+                        <td class="text-center">
+                            @if (row.basic === true) {
+                            <hugeicons-icon [icon]="check" [size]="24" color="var(--color-success)"></hugeicons-icon>
+                            } @else if (row.basic === false) {
+                            <hugeicons-icon [icon]="cancel" [size]="24"
+                                color="var(--color-text-light)"></hugeicons-icon>
+                            } @else {
+                            <span class="text-sm font-medium">{{ row.basic }}</span>
+                            }
+                        </td>
+
+                        <!-- Standard -->
+                        <td class="text-center bg-highlight">
+                            @if (row.standard === true) {
+                            <hugeicons-icon [icon]="check" [size]="24" color="var(--color-success)"></hugeicons-icon>
+                            } @else if (row.standard === false) {
+                            <hugeicons-icon [icon]="cancel" [size]="24"
+                                color="var(--color-text-light)"></hugeicons-icon>
+                            } @else {
+                            <span class="text-sm font-medium">{{ row.standard }}</span>
+                            }
+                        </td>
+
+                        <!-- Premium -->
+                        <td class="text-center">
+                            @if (row.premium === true) {
+                            <hugeicons-icon [icon]="check" [size]="24" color="var(--color-success)"></hugeicons-icon>
+                            } @else if (row.premium === false) {
+                            <hugeicons-icon [icon]="cancel" [size]="24"
+                                color="var(--color-text-light)"></hugeicons-icon>
+                            } @else {
+                            <span class="text-sm font-medium">{{ row.premium }}</span>
+                            }
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td><button class="btn btn-sm btn-outline">Elegir</button></td>
+                        <td class="bg-highlight"><button class="btn btn-sm btn-primary">Elegir</button></td>
+                        <td><button class="btn btn-sm btn-outline">Elegir</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
