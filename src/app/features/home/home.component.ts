@@ -3,6 +3,7 @@ import { CarQuoteComponent } from './components/car-quote/car-quote.component';
 import { PersonalCoveragesComponent } from './components/personal-coverages/personal-coverages.component';
 import { ProfessionalCoveragesComponent } from './components/professional-coverages/professional-coverages.component';
 import { EnterpriseCoveragesComponent } from './components/enterprise-coverages/enterprise-coverages.component';
+import { CallMeFormComponent } from '../../shared/components/call-me-form/call-me-form.component';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { HugeiconsIconComponent } from '@hugeicons/angular';
@@ -12,7 +13,6 @@ import {
   HeadsetIcon,
   CalculateIcon,
   Award01Icon,
-  WhatsappIcon,
   House01Icon,
   Briefcase01Icon,
   Building04Icon,
@@ -30,6 +30,7 @@ import { FadeInDirective } from '../../directives/fade-in.directive';
     PersonalCoveragesComponent,
     ProfessionalCoveragesComponent,
     EnterpriseCoveragesComponent,
+    CallMeFormComponent,
     FadeInDirective,
   ],
   templateUrl: './home.component.html',
@@ -85,7 +86,6 @@ export class HomeComponent implements OnInit {
   calculateIcon = CalculateIcon;
   headsetIcon = HeadsetIcon;
   awardIcon = Award01Icon;
-  whatsappIcon = WhatsappIcon;
 
   features = [
     {

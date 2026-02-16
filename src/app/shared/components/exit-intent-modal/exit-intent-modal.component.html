@@ -1,0 +1,16 @@
+@if (isVisible()) {
+<div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+        <div class="modal-body">
+            <h2>¿Te quedaste con dudas?</h2>
+            <p>Hablá con un humano en 1 minuto.</p>
+            <button class="whatsapp-btn" (click)="openWhatsapp()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="24"
+                    height="24">
+                Chat en WhatsApp
+            </button>
+        </div>
+    </div>
+</div>
+}

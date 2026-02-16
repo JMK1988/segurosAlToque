@@ -1,0 +1,23 @@
+<div class="call-me-container">
+    @if (submitted()) {
+    <div class="success-message">
+        <h3>¡Solicitud enviada!</h3>
+        <p>Un asesor te llamará en breve.</p>
+        <button (click)="submitted.set(false)">Enviar otra solicitud</button>
+    </div>
+    } @else {
+    <form [formGroup]="callForm" (ngSubmit)="onSubmit()">
+        <h3>¿Querés que te llamemos?</h3>
+        <div class="input-group">
+            <input type="tel" formControlName="phone" placeholder="Tu número (Ej: 1122334455)"
+                [class.invalid]="callForm.get('phone')?.invalid && callForm.get('phone')?.touched" />
+            <button type="submit" [disabled]="loading()">
+                @if (loading()) { <span class="loader"></span> } @else { Llamame }
+            </button>
+        </div>
+        @if (callForm.get('phone')?.invalid && callForm.get('phone')?.touched) {
+        <small class="error">Ingresá un número válido (10 dígitos).</small>
+        }
+    </form>
+    }
+</div>

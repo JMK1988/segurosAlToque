@@ -1,0 +1,102 @@
+.call-me-container {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 400px;
+    margin: 1rem auto;
+    text-align: center;
+
+    h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        color: #333;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 0.5rem;
+
+        input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+
+            &:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+
+            &.invalid {
+                border-color: #dc3545;
+            }
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+
+            &:hover:not(:disabled) {
+                background-color: #0056b3;
+            }
+
+            &:disabled {
+                background-color: #6c757d;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    .error {
+        color: #dc3545;
+        font-size: 0.875rem;
+        display: block;
+        text-align: left;
+        margin-top: 0.5rem;
+    }
+
+    .success-message {
+        color: #28a745;
+
+        button {
+            background: none;
+            border: none;
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+            margin-top: 0.5rem;
+        }
+    }
+
+    .loader {
+        /* Simple loader styling */
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #3498db;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}
