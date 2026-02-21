@@ -1,89 +1,302 @@
 <section class="quote-section">
   <div class="container">
+
+    <!-- ── FORMULARIO PRINCIPAL ─────────────────────────── -->
+    @if (!mostrarResultados()) {
     <div class="form-card">
-      @if (submitted()) {
-        <div class="success-message text-center">
-          <div class="success-icon">✅</div>
-          <h2>¡Gracias por tu consulta!</h2>
-          <p>Un asesor se pondrá en contacto con vos a la brevedad.</p>
-          <button class="btn btn--primary" (click)="submitted.set(false); quoteForm.reset()">
-            Nueva Cotización
-          </button>
-        </div>
-      } @else {
-        <div class="form-header text-center">
-          <h2>Cotizá tu Seguro</h2>
-          <p>Completá el formulario y recibí la mejor propuesta.</p>
-        </div>
+      <div class="form-header text-center">
+        <div class="form-header__icon">🚗</div>
+        <h2>Finalizá tu Cotización</h2>
+        <p>Confirmá los datos de tu vehículo y completá la información para ver precios.</p>
+      </div>
 
-        <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()" class="quote-form">
-          <div class="form-group">
-            <label for="name">Nombre Completo</label>
-            <input
-              type="text"
-              id="name"
-              formControlName="name"
-              class="form-input"
-              placeholder="Juan Perez"
-            />
-            @if (quoteForm.get('name')?.invalid && quoteForm.get('name')?.touched) {
-              <span class="error-msg">Requerido</span>
-            }
+      <form [formGroup]="cotizarForm" (ngSubmit)="onCotizar()" class="cotizar-form">
+
+        <!-- SECCIÓN 1: VEHÍCULO -->
+        <div class="form-step-title">1. Datos del Vehículo</div>
+        <div class="form-grid">
+          <!-- Marca -->
+          <div class="form-group full-width-mobile">
+            <label for="marca">Marca</label>
+            <div class="select-wrapper">
+              <select id="marca" formControlName="marca" class="form-select">
+                <option value="" disabled>
+                  @if (cargandoMarcas()) { Cargando... } @else { Seleccioná Marca }
+                </option>
+                @for (marca of marcas(); track marca) {
+                <option [value]="marca">{{ marca }}</option>
+                }
+              </select>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              formControlName="email"
-              class="form-input"
-              placeholder="juan@email.com"
-            />
-            @if (quoteForm.get('email')?.invalid && quoteForm.get('email')?.touched) {
-              <span class="error-msg">Email inválido</span>
-            }
+          <!-- Modelo -->
+          <div class="form-group full-width-mobile">
+            <label for="modelo">Modelo</label>
+            <div class="select-wrapper">
+              <select id="modelo" formControlName="modelo" class="form-select">
+                <option value="" disabled>
+                  @if (cargandoModelos()) { Cargando... }
+                  @else { Seleccioná Modelo }
+                </option>
+                @for (modelo of modelos(); track modelo) {
+                <option [value]="modelo">{{ modelo }}</option>
+                }
+              </select>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="phone">Teléfono (WhatsApp)</label>
-            <input
-              type="tel"
-              id="phone"
-              formControlName="phone"
-              class="form-input"
-              placeholder="11 1234 5678"
-            />
-            @if (quoteForm.get('phone')?.invalid && quoteForm.get('phone')?.touched) {
-              <span class="error-msg">Requerido</span>
-            }
+          <!-- Versión -->
+          <div class="form-group full-width">
+            <label for="version">Versión Exacta</label>
+            <div class="select-wrapper">
+              <select id="version" formControlName="version" class="form-select">
+                <option value="" disabled>
+                  @if (cargandoVersiones()) { Buscando... }
+                  @else { Seleccioná Versión }
+                </option>
+                @for (v of versiones(); track v.codInfoAuto) {
+                <option [value]="v.codInfoAuto">{{ v.descripcion }}</option>
+                }
+              </select>
+            </div>
           </div>
 
+          <!-- Año -->
           <div class="form-group">
-            <label for="insuranceType">Tipo de Seguro</label>
-            <select id="insuranceType" formControlName="insuranceType" class="form-select">
-              @for (type of insuranceTypes; track type) {
-                <option [value]="type">{{ type }}</option>
+            <label for="anio">Año</label>
+            <select id="anio" formControlName="anio" class="form-select">
+              @for (anio of anios; track anio) {
+              <option [value]="anio">{{ anio }}</option>
               }
             </select>
           </div>
+        </div>
 
+        <hr class="form-divider" />
+
+        <!-- SECCIÓN 2: LOCALIDAD Y EXTRAS -->
+        <div class="form-step-title">2. Información Adicional</div>
+        <div class="form-grid">
+          <!-- Código Postal -->
+          <div class="form-group">
+            <label for="codigoPostal">Código Postal</label>
+            <input type="text" id="codigoPostal" formControlName="codigoPostal" class="form-input"
+              placeholder="Ej: 1425" maxlength="8" />
+            @if (cotizarForm.get('codigoPostal')?.invalid && cotizarForm.get('codigoPostal')?.touched) {
+            <span class="error-msg">Ingresá tu Código Postal (Ej: 1425)</span>
+            }
+          </div>
+
+          <!-- Uso -->
+          <div class="form-group">
+            <label for="uso">Uso del Auto</label>
+            <select id="uso" formControlName="uso" class="form-select">
+              <option [value]="1">Uso Particular</option>
+              <option [value]="2">Uso Comercial / Profesional</option>
+            </select>
+          </div>
+
+          <!-- GNC -->
           <div class="form-group full-width">
-            <label for="message">Mensaje Adicional</label>
-            <textarea
-              id="message"
-              formControlName="message"
-              class="form-textarea"
-              rows="4"
-              placeholder="Contanos más detalles..."
-            ></textarea>
+            <label class="gnc-toggle">
+              <input type="checkbox" formControlName="gnc" id="gnc" />
+              <div class="toggle-slider"></div>
+              <span>Mi auto tiene equipo de GNC</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-actions full-width">
+          <button type="submit" class="btn-cotizar" [disabled]="hayCargando() || cotizarForm.invalid">
+            @if (hayCargando()) {
+            <span class="btn-spinner"></span>
+            <span>Analizando Precios...</span>
+            } @else {
+            <span>Obtener Coberturas</span>
+            <span class="btn-arrow">→</span>
+            }
+          </button>
+        </div>
+
+        <!-- Alertas -->
+        @if (hayError()) {
+        <div class="form-error-banner full-width">
+          <span class="error-icon">⚠️</span>
+          <div>
+            <strong>No pudimos cotizar</strong>
+            <p>Verificá los datos o el Código Postal e intentá nuevamente.</p>
+          </div>
+        </div>
+        }
+
+        @if (!hayCargando() && !hayError() && !mostrarResultados() && busquedaRealizada()) {
+        <div class="info-banner full-width">
+          <span class="info-icon">ℹ️</span>
+          <p>No hay coberturas disponibles para el vehículo y zona seleccionada.</p>
+        </div>
+        }
+      </form>
+    </div>
+    }
+
+    <!-- ── RESULTADOS ──────────────────────────────────── -->
+    @if (mostrarResultados()) {
+    <div class="resultados-section">
+
+      @if (resultados()['ma'].vehiculo; as veh) {
+      <div class="vehiculo-info">
+        <div class="vehiculo-info__details">
+          <div class="veh-icon">🚗</div>
+          <div>
+            <h3>{{ veh.nombre }}</h3>
+            <p>Suma Asegurada: <strong>{{ formatPremio(veh.sumaAsegurada) }}</strong></p>
+          </div>
+        </div>
+        <button class="btn-reset" (click)="nuevaCotizacion()">
+          Cambiar Vehículo
+        </button>
+      </div>
+      }
+
+      <div class="filter-bar">
+        <button type="button" class="filter-btn" [class.active]="filtroSeleccionado() === 'TODOS'"
+          (click)="filtroSeleccionado.set('TODOS')">
+          Todos ({{ todasLasCoberturas().length }})
+        </button>
+        <button type="button" class="filter-btn" [class.active]="filtroSeleccionado() === 'RC'"
+          (click)="filtroSeleccionado.set('RC')">
+          Solo RC
+        </button>
+        <button type="button" class="filter-btn" [class.active]="filtroSeleccionado() === 'TC'"
+          (click)="filtroSeleccionado.set('TC')">
+          Terceros Completo
+        </button>
+        <button type="button" class="filter-btn" [class.active]="filtroSeleccionado() === 'TR'"
+          (click)="filtroSeleccionado.set('TR')">
+          Todo Riesgo
+        </button>
+      </div>
+
+      <div class="resultados-grid">
+        @for (cobertura of coberturasFiltradas(); track cobertura.codigoInterno) {
+        <div class="cobertura-card">
+          <div class="card-header">
+            <span class="aseguradora-badge">{{ cobertura.nombreAseguradora }}</span>
+            <span class="tier-pill">{{ cobertura.codigoProducto }}</span>
           </div>
 
-          <div class="form-actions full-width">
-            <button type="submit" class="btn btn--primary btn--block">Solicitar Cotización</button>
+          <h3 class="cobertura-name">{{ cobertura.descripcion }}</h3>
+
+          <div class="price-box">
+            <span class="currency">$</span>
+            <span class="amount">{{ cobertura.premio.toLocaleString('es-AR') }}</span>
+            <span class="period">/ mes</span>
           </div>
-        </form>
-      }
+
+          <ul class="features-list">
+            <li><span class="check">✓</span> Responsabilidad Civil</li>
+            @if (cobertura.granizo) {
+            <li><span class="check">✓</span> Cobertura de Granizo</li>
+            }
+            @if (cobertura.franquicia > 0) {
+            <li class="info">Franquicia: {{ formatPremio(cobertura.franquicia) }}</li>
+            }
+          </ul>
+
+          <div class="card-actions">
+            <button class="btn-details" (click)="abrirDetalles(cobertura)">
+              Ver Detalles
+            </button>
+            <a [href]="getWhatsappUrl(cobertura.descripcion, cobertura.nombreAseguradora || '', cobertura.premio)"
+              target="_blank" class="whatsapp-btn">
+              <hugeicons-icon [icon]="whatsappIcon" [size]="18" [strokeWidth]="2"></hugeicons-icon>
+              Contratar
+            </a>
+          </div>
+        </div>
+        }
+      </div>
     </div>
+    }
+
+    <!-- Modal de Detalles -->
+    @if (coberturaDetalle(); as det) {
+    <div class="modal-overlay" (click)="cerrarDetalles()">
+      <div class="details-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Detalles de Cobertura</h3>
+          <button class="btn-close" (click)="cerrarDetalles()">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="detail-header">
+            <span class="badge">{{ det.nombreAseguradora }}</span>
+            <h4>{{ det.descripcion }}</h4>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="label">Cuota Mensual</span>
+              <span class="value spotlight">{{ formatPremio(det.premio) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Suma Asegurada</span>
+              <span class="value">{{ formatPremio(resultados()['ma'].vehiculo?.sumaAsegurada || 0) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Granizo</span>
+              <span class="value">{{ det.granizo ? 'Incluido' : 'No incluido' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Inspección Técnica</span>
+              <span class="value" [style.color]="det.requiereInspeccion ? '#ef4444' : '#22c55e'">
+                {{ det.requiereInspeccion ? 'Obligatoria' : 'No requerida' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="detail-benefits">
+            <h5>Lo que cubre esta póliza:</h5>
+            <div class="benefits-grid">
+              @for (item of det.beneficios; track item) {
+              <div class="benefit-tag">
+                <span class="check">✓</span> {{ item }}
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="detail-legal">
+            <h5>Desglose e Información Técnica:</h5>
+            <ul>
+              <li><strong>Prima Neta:</strong> {{ formatPremio(det.prima) }}</li>
+              <li><strong>IVA (21%):</strong> {{ formatPremio(det.iva) }}</li>
+              <li><strong>Plan:</strong> {{ det.codigoProducto }}</li>
+              <li><strong>Forma de Pago:</strong> Débito Automático (CBU / Tarjeta)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <a [href]="getWhatsappUrl(det.descripcion, det.nombreAseguradora || '', det.premio)" target="_blank"
+            class="whatsapp-btn full-width">
+            <hugeicons-icon [icon]="whatsappIcon" [size]="20" [strokeWidth]="2"></hugeicons-icon>
+            Confirmar y Contratar
+          </a>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Estado cargando -->
+    @if (hayCargando() && !mostrarResultados()) {
+    <div class="loading-state">
+      <div class="loading-spinner-lg"></div>
+      <p>Estamos comparando las mejores aseguradoras para vos...</p>
+    </div>
+    }
+
   </div>
 </section>

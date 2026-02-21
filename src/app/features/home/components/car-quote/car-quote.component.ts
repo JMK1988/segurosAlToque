@@ -1,55 +1,78 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { HugeiconsIconComponent } from '@hugeicons/angular';
 import { ArrowRight01Icon, Car01Icon } from '@hugeicons/core-free-icons';
 
+import { VehiculosService } from '../../../../core/services/vehiculos.service';
+import { CotizadorService } from '../../../../core/services/cotizador.service';
+
 @Component({
     selector: 'app-car-quote',
-    standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, HugeiconsIconComponent],
+    imports: [ReactiveFormsModule, HugeiconsIconComponent],
     templateUrl: './car-quote.component.html',
     styleUrl: './car-quote.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarQuoteComponent {
-    quoteForm: FormGroup;
-    currentStep = signal(1);
+    private readonly fb = inject(FormBuilder);
+    private readonly router = inject(Router);
+    readonly vehiculosService = inject(VehiculosService);
+    private readonly cotizadorService = inject(CotizadorService);
 
     // Icons
-    arrowRightIcon = ArrowRight01Icon;
-    carIcon = Car01Icon;
+    readonly arrowRightIcon = ArrowRight01Icon;
+    readonly carIcon = Car01Icon;
 
-    // Mock Data
-    years = Array.from({ length: 20 }, (_, i) => new Date().getFullYear() - i);
-    brands = ['Volkswagen', 'Chevrolet', 'Ford', 'Fiat', 'Toyota', 'Renault', 'Peugeot'];
-    models: string[] = [];
-    versions: string[] = [];
+    // Signals del servicio
+    readonly marcas = this.vehiculosService.marcas;
+    readonly modelos = this.vehiculosService.modelos;
+    readonly versiones = this.vehiculosService.versiones;
+    readonly cargandoMarcas = this.vehiculosService.cargandoMarcas;
+    readonly cargandoModelos = this.vehiculosService.cargandoModelos;
+    readonly cargandoVersiones = this.vehiculosService.cargandoVersiones;
 
-    constructor(private fb: FormBuilder) {
-        this.quoteForm = this.fb.group({
-            year: ['', Validators.required],
-            brand: ['', Validators.required],
-            model: ['', Validators.required],
-            version: ['', Validators.required]
-        });
+    readonly years = Array.from(
+        { length: new Date().getFullYear() - 1989 },
+        (_, i) => new Date().getFullYear() - i
+    );
 
-        // Mock dependent dropdowns
-        this.quoteForm.get('brand')?.valueChanges.subscribe(() => {
-            this.models = ['Gol', 'Vento', 'Polo', 'Virtus']; // Mock
-            this.quoteForm.patchValue({ model: '', version: '' });
-        });
+    readonly quoteForm = this.fb.group({
+        brand: ['', Validators.required],
+        model: ['', Validators.required],
+        version: ['', Validators.required],
+        year: ['', Validators.required],
+    });
 
-        this.quoteForm.get('model')?.valueChanges.subscribe(() => {
-            this.versions = ['Trendline', 'Comfortline', 'Highline', 'GTS']; // Mock
-            this.quoteForm.patchValue({ version: '' });
-        });
+    onMarcaChange(event: Event): void {
+        const select = event.target as HTMLSelectElement;
+        this.quoteForm.patchValue({ model: '', version: '' });
+        this.vehiculosService.seleccionarMarca(select.value);
     }
 
-    onSubmit() {
-        if (this.quoteForm.valid) {
-            console.log('Cotizando...', this.quoteForm.value);
-            // Here navigate to full quote or show result
+    onModeloChange(event: Event): void {
+        const select = event.target as HTMLSelectElement;
+        this.quoteForm.patchValue({ version: '' });
+        this.vehiculosService.seleccionarModelo(select.value);
+    }
+
+    onSubmit(): void {
+        if (this.quoteForm.invalid) {
+            this.quoteForm.markAllAsTouched();
+            return;
         }
+
+        const val = this.quoteForm.value;
+
+        // Guardamos los datos seleccionados para el siguiente paso
+        this.cotizadorService.guardarDatosWidget({
+            marca: val.brand!,
+            modelo: val.model!,
+            version: val.version!,
+            anio: Number(val.year!),
+        });
+
+        // Navegamos al formulario completo
+        this.router.navigate(['/cotizar']);
     }
 }

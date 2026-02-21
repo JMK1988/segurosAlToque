@@ -1,0 +1,11 @@
+{
+    "/api-proxy": {
+        "target": "https://api-segurosaltoque.onrender.com",
+        "changeOrigin": true,
+        "secure": true,
+        "pathRewrite": {
+            "^/api-proxy": ""
+        },
+        "logLevel": "info"
+    }
+}

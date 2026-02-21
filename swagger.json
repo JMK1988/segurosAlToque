@@ -1,0 +1,367 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "BrokerSeguros.Api",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/Cotizacion/atm/test": {
+      "post": {
+        "tags": [
+          "Cotizacion"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CotizacionRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CotizacionRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CotizacionRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Cotizacion/sancristobal/test": {
+      "post": {
+        "tags": [
+          "Cotizacion"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CotizacionRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CotizacionRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CotizacionRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Cotizacion/mercantilandina/test": {
+      "post": {
+        "tags": [
+          "Cotizacion"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MercantilAndinaRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MercantilAndinaRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MercantilAndinaRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Vehiculos/marcas": {
+      "get": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Vehiculos/modelos": {
+      "get": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "parameters": [
+          {
+            "name": "marca",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Vehiculos/versiones": {
+      "get": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "parameters": [
+          {
+            "name": "marca",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "modelo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccesorioRequestDto": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valor": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CotizacionRequestDto": {
+        "type": "object",
+        "properties": {
+          "tipoPersona": {
+            "type": "string",
+            "nullable": true
+          },
+          "condicionIva": {
+            "type": "string",
+            "nullable": true
+          },
+          "cuponDescuento": {
+            "type": "string",
+            "nullable": true
+          },
+          "bonificacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seccion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "marcaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "modeloId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codInfoauto": {
+            "type": "string",
+            "nullable": true
+          },
+          "anioFabricacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "esCeroKm": {
+            "type": "boolean"
+          },
+          "sumaAsegurada": {
+            "type": "number",
+            "format": "double"
+          },
+          "codigoPostal": {
+            "type": "string",
+            "nullable": true
+          },
+          "subCp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ajuste": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoUsoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gnc": {
+            "type": "boolean"
+          },
+          "alarma": {
+            "type": "boolean"
+          },
+          "rastreo": {
+            "type": "string",
+            "nullable": true
+          },
+          "accesorios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccesorioRequestDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MaLocalidad": {
+        "type": "object",
+        "properties": {
+          "codigo_postal": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MaPago": {
+        "type": "object",
+        "properties": {
+          "tipo_pago": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MaProductor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MaVehiculo": {
+        "type": "object",
+        "properties": {
+          "infoauto": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "anio": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uso": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gnc": {
+            "type": "boolean"
+          },
+          "rastreo": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MercantilAndinaRequestDto": {
+        "type": "object",
+        "properties": {
+          "localidad": {
+            "$ref": "#/components/schemas/MaLocalidad"
+          },
+          "vehiculo": {
+            "$ref": "#/components/schemas/MaVehiculo"
+          },
+          "comision": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bonificacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "periodo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cuotas": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pago": {
+            "$ref": "#/components/schemas/MaPago"
+          },
+          "ajuste_suma": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "iva": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "desglose": {
+            "type": "boolean"
+          },
+          "productor": {
+            "$ref": "#/components/schemas/MaProductor"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

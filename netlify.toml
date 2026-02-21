@@ -1,3 +1,12 @@
+# Proxy para la API (evita CORS en producción)
+# /api-proxy/* → https://api-segurosaltoque.onrender.com/*
+[[redirects]]
+  from = "/api-proxy/*"
+  to = "https://api-segurosaltoque.onrender.com/:splat"
+  status = 200
+  force = true
+
+# SPA fallback — debe ir siempre al final
 [[redirects]]
   from = "/*"
   to = "/index.html"
