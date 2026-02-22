@@ -46,6 +46,15 @@ export class QuoteComponent implements OnInit {
   readonly busquedaRealizada = signal(false);
   readonly filtroSeleccionado = signal<'TODOS' | 'RC' | 'TC' | 'TR'>('TODOS');
   readonly coberturaDetalle = signal<CoberturaResultado | null>(null);
+  readonly mensajeCarga = signal('Estamos comparando las mejores aseguradoras...');
+
+  private readonly mensajes = [
+    'Estamos comparando las mejores aseguradoras...',
+    'Analizando tu perfil de riesgo...',
+    'Buscando beneficios adicionales para vos...',
+    'Calculando precios finales con impuestos...',
+    'Casi listo! Estamos ordenando los resultados...'
+  ];
 
   readonly mostrarResultados = computed(() => this.todasLasCoberturas().length > 0);
 
@@ -84,6 +93,18 @@ export class QuoteComponent implements OnInit {
   );
 
   constructor() {
+    // Efecto para rotar mensajes de carga
+    effect((onCleanup) => {
+      if (this.hayCargando() && !this.mostrarResultados()) {
+        let i = 0;
+        const interval = setInterval(() => {
+          i = (i + 1) % this.mensajes.length;
+          this.mensajeCarga.set(this.mensajes[i]);
+        }, 2500);
+        onCleanup(() => clearInterval(interval));
+      }
+    });
+
     effect(() => {
       const pre = this.cotizadorService.datosWidget();
       if (pre) {

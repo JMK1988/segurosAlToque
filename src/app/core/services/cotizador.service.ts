@@ -66,6 +66,7 @@ export class CotizadorService {
     }
 
     cotizar(datos: DatosCotizacion): void {
+        console.time('[CotizadorService] Tiempo total cotización');
         this._datosCotizacion.set(datos);
         this._cargando.set(true);
 
@@ -84,7 +85,7 @@ export class CotizadorService {
 
         const ma$ = this.maService.cotizar(maRequest).pipe(
             map((resp: any) => {
-                console.log('[CotizadorService] Respuesta MA:', resp);
+                console.timeLog('[CotizadorService] Tiempo total cotización', 'Respuesta recibida de la API');
 
                 // Si la aseguradora responde pero con un estado de error (ej: CONFLICT)
                 if (resp.estado && resp.estado !== 'OK') {
@@ -100,14 +101,13 @@ export class CotizadorService {
             }),
             catchError((err) => {
                 console.error('[CotizadorService] Error MA:', err);
-                // Si el error viene de nuestro throw (Error) o es un error de HTTP
                 const msg = err instanceof Error ? err.message : (err?.error?.mensaje || 'Error al conectar con la aseguradora.');
                 return of({ ok: false, error: msg });
             })
         );
 
         forkJoin({ ma: ma$ }).subscribe(({ ma }) => {
-            console.log('[CotizadorService] Resultado final forkJoin:', ma);
+            console.timeEnd('[CotizadorService] Tiempo total cotización');
             this._actualizarAseguradora('ma', (prev) => {
                 if (!ma.ok) {
                     return { ...prev, estado: 'error', error: (ma as any).error };

@@ -10,6 +10,7 @@ $radius-card: 1.5rem;
   padding: 4rem 0;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
   min-height: 90vh;
+  overflow-x: hidden;
 }
 
 // ── Tarjeta del formulario ──────────────────────────────────
@@ -786,6 +787,160 @@ $radius-card: 1.5rem;
 
   to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Estado de Carga (Skeletons y Mensajes) ─────────────────────
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.loading-messages {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba($primary, 0.1);
+    border-top: 4px solid $secondary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $primary;
+    margin: 0;
+    min-height: 1.5em;
+  }
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+.skeleton-card {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow: hidden;
+  position: relative;
+
+  .skeleton-box {
+    background: #f1f5f9;
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+
+    &.badge {
+      width: 100px;
+      height: 16px;
+    }
+
+    &.pill {
+      width: 60px;
+      height: 24px;
+      border-radius: 99px;
+    }
+
+    &.title {
+      width: 80%;
+      height: 32px;
+      margin: 0.5rem 0;
+    }
+
+    &.price {
+      width: 140px;
+      height: 48px;
+      margin-bottom: 1rem;
+    }
+
+    &.list-item {
+      width: 90%;
+      height: 14px;
+    }
+
+    &.button {
+      width: 100%;
+      height: 44px;
+      border-radius: 1rem;
+    }
+  }
+
+  .skeleton-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .skeleton-footer {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.animate-text {
+  animation: textBlurIn 0.5s ease-out forwards;
+}
+
+@keyframes textBlurIn {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
     transform: translateY(0);
   }
 }

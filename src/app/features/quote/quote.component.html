@@ -290,11 +290,32 @@
     </div>
     }
 
-    <!-- Estado cargando -->
+    <!-- Estado cargando con Skeletons y Mensajes Dinámicos -->
     @if (hayCargando() && !mostrarResultados()) {
-    <div class="loading-state">
-      <div class="loading-spinner-lg"></div>
-      <p>Estamos comparando las mejores aseguradoras para vos...</p>
+    <div class="loading-container">
+      <div class="loading-messages">
+        <div class="loading-spinner"></div>
+        <p class="animate-text">{{ mensajeCarga() }}</p>
+      </div>
+
+      <div class="skeleton-grid">
+        @for (i of [1,2,3]; track i) {
+        <div class="skeleton-card">
+          <div class="skeleton-header">
+            <div class="skeleton-box badge"></div>
+            <div class="skeleton-box pill"></div>
+          </div>
+          <div class="skeleton-box title"></div>
+          <div class="skeleton-box price"></div>
+          <div class="skeleton-box list-item"></div>
+          <div class="skeleton-box list-item"></div>
+          <div class="skeleton-footer">
+            <div class="skeleton-box button"></div>
+            <div class="skeleton-box button"></div>
+          </div>
+        </div>
+        }
+      </div>
     </div>
     }
 
