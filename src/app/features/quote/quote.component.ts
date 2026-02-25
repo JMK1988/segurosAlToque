@@ -53,7 +53,7 @@ export class QuoteComponent implements OnInit {
     'Analizando tu perfil de riesgo...',
     'Buscando beneficios adicionales para vos...',
     'Calculando precios finales con impuestos...',
-    'Casi listo! Estamos ordenando los resultados...'
+    'Casi listo! Estamos ordenando los resultados...',
   ];
 
   readonly mostrarResultados = computed(() => this.todasLasCoberturas().length > 0);
@@ -64,11 +64,32 @@ export class QuoteComponent implements OnInit {
 
     if (filtro === 'TODOS') return todas;
 
-    return todas.filter(c => {
+    return todas.filter((c) => {
       const desc = c.descripcion?.toUpperCase() || '';
-      if (filtro === 'RC') return desc.includes('RESPONSABILIDAD CIVIL');
-      if (filtro === 'TC') return desc.includes('TERCEROS');
-      if (filtro === 'TR') return desc.includes('TODO RIESGO');
+      if (filtro === 'RC') return desc.includes('RESPONSABILIDAD CIVIL') || desc.includes('RCA');
+
+      if (filtro === 'TC') {
+        return (
+          desc.includes('TERCEROS') ||
+          desc.includes('T34') ||
+          desc.includes('T41') ||
+          desc.includes('T85') ||
+          desc.includes('T80') ||
+          desc.includes('T42') ||
+          desc.includes('M BASICA') ||
+          desc.includes('M PLUS')
+        );
+      }
+
+      if (filtro === 'TR') {
+        return (
+          desc.includes('TODO RIESGO') ||
+          (desc.includes('D') && desc.length < 5) ||
+          desc.includes('D21') ||
+          desc.includes('D22') ||
+          desc.includes('D23')
+        );
+      }
       return true;
     });
   });
@@ -89,7 +110,7 @@ export class QuoteComponent implements OnInit {
 
   readonly anios = Array.from(
     { length: new Date().getFullYear() - 1989 },
-    (_, i) => new Date().getFullYear() - i
+    (_, i) => new Date().getFullYear() - i,
   );
 
   constructor() {
@@ -114,12 +135,15 @@ export class QuoteComponent implements OnInit {
         this.cotizarForm.get('modelo')?.enable({ emitEvent: false });
         this.cotizarForm.get('version')?.enable({ emitEvent: false });
 
-        this.cotizarForm.patchValue({
-          marca: pre.marca,
-          modelo: pre.modelo,
-          version: pre.version,
-          anio: pre.anio
-        }, { emitEvent: false });
+        this.cotizarForm.patchValue(
+          {
+            marca: pre.marca,
+            modelo: pre.modelo,
+            version: pre.version,
+            anio: pre.anio,
+          },
+          { emitEvent: false },
+        );
       }
     });
   }

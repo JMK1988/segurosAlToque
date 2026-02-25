@@ -15,7 +15,8 @@ $radius: 1.25rem;
   backdrop-filter: blur(10px);
   padding: 2rem;
   border-radius: $radius;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15),
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(15, 23, 42, 0.03);
   /* Hex value for stability */
   max-width: 1000px;
@@ -29,9 +30,18 @@ $radius: 1.25rem;
     inset: 0;
     border-radius: $radius;
     padding: 2px;
-    background: linear-gradient(135deg, rgba(56, 114, 179, 0.2), transparent, rgba(56, 114, 179, 0.1));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    background: linear-gradient(
+      135deg,
+      rgba(56, 114, 179, 0.2),
+      transparent,
+      rgba(56, 114, 179, 0.1)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
@@ -102,13 +112,14 @@ $radius: 1.25rem;
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.25rem;
+  width: 100%;
 
   @media (min-width: 640px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
   @media (min-width: 1024px) {
-    grid-template-columns: 1.2fr 0.8fr 1.5fr 1.5fr 0.8fr;
+    grid-template-columns: 1.2fr 1.3fr 2fr 0.8fr;
     gap: 1rem;
   }
 }
@@ -221,9 +232,8 @@ $radius: 1.25rem;
   width: 100%;
 
   @media (min-width: 1024px) {
-    width: auto;
-    margin-top: 1.4rem;
-    flex-shrink: 0;
+    width: 100%;
+    margin-top: 0.5rem;
   }
 
   &:hover:not(:disabled) {
