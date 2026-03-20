@@ -1,6 +1,6 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 import {
   AseguradoraId,
@@ -12,6 +12,10 @@ import { MaProductoResultado, MercantilAndinaResponse } from '../models/ma-cotiz
 import { MaCotizadorService } from './ma-cotizador.service';
 import { RusCotizacionResponse } from '../models/rus-cotizador.models';
 import { RusCotizadorService } from './rus-cotizador.service';
+import { AtmCoberturaDto, AtmCotizacionResponse } from '../models/atm-cotizador.models';
+import { AtmCotizadorService } from './atm-cotizador.service';
+import { ProvinciaMultiQuoteResponse } from '../models/provincia-cotizador.models';
+import { ProvinciaCotizadorService } from './provincia-cotizador.service';
 
 /**
  * Servicio orquestador del multicotizador.
@@ -21,6 +25,8 @@ import { RusCotizadorService } from './rus-cotizador.service';
 export class CotizadorService {
   private readonly maService = inject(MaCotizadorService);
   private readonly rusService = inject(RusCotizadorService);
+  private readonly atmService = inject(AtmCotizadorService);
+  private readonly provinciaService = inject(ProvinciaCotizadorService);
 
   // ── Estado reactivo ───────────────────────────────────────
 
@@ -36,6 +42,8 @@ export class CotizadorService {
   private readonly _resultados = signal<Record<AseguradoraId, ResultadoAseguradora>>({
     ma: this.initialResultado('ma', 'Mercantil Andina', 'assets/logos/ma.png'),
     rus: this.initialResultado('rus', 'RUS', 'assets/logos/rus.png'),
+    atm: this.initialResultado('atm', 'ATM Seguros', 'assets/logos/atm.png'),
+    provincia: this.initialResultado('provincia', 'Provincia Seguros', 'assets/logos/provincia.png'),
   });
 
   readonly cargando = this._cargando.asReadonly();
@@ -93,6 +101,7 @@ export class CotizadorService {
       cuotas: datos.cuotas,
       tipoPago: datos.tipo_pago,
     });
+    console.log('[CotizadorService] Request MA JSON:', JSON.stringify(maRequest, null, 2));
 
     const ma$ = this.maService.cotizar(maRequest).pipe(
       map((resp: any) => {
@@ -126,32 +135,134 @@ export class CotizadorService {
       }),
     );
 
-    const rusRequest = this.rusService.buildRequest({
-      codigoPostal: datos.localidad.codigo_postal,
-      infoauto: datos.vehiculo.infoauto,
-      anio: datos.vehiculo.anio,
-      uso: datos.vehiculo.uso,
-      gnc: datos.vehiculo.gnc,
-      rastreo: datos.vehiculo.rastreo,
-      cuotas: datos.cuotas,
-    });
-
-    const rus$ = this.rusService.cotizar(rusRequest).pipe(
+    const rus$ = this.rusService.versionToCodia(String(datos.vehiculo.infoauto)).pipe(
+      switchMap((codia) => {
+        if (!codia) {
+          throw new Error(
+            'RUS: no se pudo mapear la version seleccionada al codigo CODIA requerido.',
+          );
+        }
+        const rusRequest = this.rusService.buildRequest({
+          codigoPostal: datos.localidad.codigo_postal,
+          infoauto: codia,
+          anio: datos.vehiculo.anio,
+          uso: datos.vehiculo.uso,
+          gnc: datos.vehiculo.gnc,
+          rastreo: datos.vehiculo.rastreo,
+          cuotas: datos.cuotas,
+        });
+        console.log('[CotizadorService] RUS codia resuelto:', codia);
+        console.log('[CotizadorService] Request RUS JSON:', JSON.stringify(rusRequest, null, 2));
+        return this.rusService.cotizar(rusRequest);
+      }),
       map((resp: any) => {
         if (resp && resp.cantidadTotal > 0 && resp.dtoList) {
           return { ok: true, data: this._normalizarRus(resp) };
         }
-        throw new Error('La aseguradora RUS no devolvió resultados.');
+        throw new Error('La aseguradora RUS no devolvio resultados.');
       }),
       catchError((err) => {
         console.error('[CotizadorService] Error RUS:', err);
+        const backendMsg =
+          err?.error?.message ||
+          err?.error?.mensaje ||
+          err?.error?.title ||
+          err?.message;
         const msg =
-          err instanceof Error ? err.message : 'Error al conectar con la aseguradora RUS.';
+          typeof backendMsg === 'string' && backendMsg.length > 0
+            ? `RUS: ${backendMsg}`
+            : 'Error al conectar con la aseguradora RUS.';
         return of({ ok: false, error: msg });
       }),
     );
 
-    forkJoin({ ma: ma$, rus: rus$ }).subscribe(({ ma, rus }) => {
+    // ATM necesita el nombre del vehículo para buscar sus códigos internos
+    const nombreVehiculo = datos.nombreVehiculo || '';
+
+    const atm$ = (nombreVehiculo
+      ? this.atmService.cotizarConBusqueda(nombreVehiculo, {
+          anio: datos.vehiculo.anio,
+          codigoPostal: datos.localidad.codigo_postal,
+          gnc: datos.vehiculo.gnc,
+        })
+      : of(null as any)
+    ).pipe(
+      map((resp: AtmCotizacionResponse | null) => {
+        if (!resp) {
+          throw new Error('ATM Seguros: se necesita el nombre del vehículo para cotizar.');
+        }
+        console.log('[CotizadorService] Request ATM contexto:', JSON.stringify(
+          {
+            nombreVehiculo,
+            anio: datos.vehiculo.anio,
+            codigoPostal: datos.localidad.codigo_postal,
+            gnc: datos.vehiculo.gnc,
+          },
+          null,
+          2,
+        ));
+        if (!resp.success || !resp.coberturas?.length) {
+          const errMsg = resp.mensajesError?.[0] || 'ATM Seguros no devolvió resultados para este vehículo.';
+          throw new Error(errMsg);
+        }
+        return { ok: true, data: this._normalizarAtm(resp) };
+      }),
+      catchError((err) => {
+        console.error('[CotizadorService] Error ATM:', err);
+        const msg =
+          err instanceof Error ? err.message : 'Error al conectar con la aseguradora ATM.';
+        return of({ ok: false, error: msg });
+      }),
+    );
+
+    const provincia$ = this.provinciaService
+      .resolveVehicleCodes({
+        marca: datos.marca,
+        modelo: datos.modelo,
+        versionCode: String(datos.vehiculo.infoauto),
+        anio: String(datos.vehiculo.anio),
+      })
+      .pipe(
+        switchMap((vehicleCodes) => {
+          const provinciaRequest = this.provinciaService.buildRequest({
+            datos,
+            vehicleCodes,
+          });
+          console.log(
+            '[CotizadorService] Provincia vehicleCodes resueltos:',
+            JSON.stringify(vehicleCodes, null, 2),
+          );
+          console.log(
+            '[CotizadorService] Request Provincia JSON:',
+            JSON.stringify(provinciaRequest, null, 2),
+          );
+          return this.provinciaService.cotizar(provinciaRequest);
+        }),
+        map((resp: ProvinciaMultiQuoteResponse) => {
+          const provinciaResult = resp.results?.find((item) => item.insurer === 'provincia');
+          if (!resp.success || !provinciaResult?.plans?.length) {
+            const errorProvincia = resp.errors?.find((item) => item.insurer === 'provincia');
+            throw new Error(
+              errorProvincia?.message ||
+                'Provincia Seguros no devolvió coberturas para los datos ingresados.',
+            );
+          }
+          return { ok: true, data: this._normalizarProvincia(provinciaResult) };
+        }),
+        catchError((err) => {
+          console.error('[CotizadorService] Error Provincia:', err);
+          // Con el backend devolviendo siempre 200, el error viene del map() como Error estándar.
+          // Casos especiales por código de error del conector backend.
+          const msg =
+            err instanceof Error
+              ? err.message
+              : err?.error?.message || err?.message || 'Error al conectar con la aseguradora Provincia.';
+          return of({ ok: false, error: msg });
+        }),
+      );
+
+    forkJoin({ ma: ma$, rus: rus$, atm: atm$, provincia: provincia$ }).subscribe(
+      ({ ma, rus, atm, provincia }) => {
       console.timeEnd('[CotizadorService] Tiempo total cotización');
       this._actualizarAseguradora('ma', (prev) => {
         if (!ma.ok) {
@@ -165,8 +276,21 @@ export class CotizadorService {
         }
         return { ...prev, ...(rus as any).data, estado: 'ok' };
       });
+      this._actualizarAseguradora('atm', (prev) => {
+        if (!atm.ok) {
+          return { ...prev, estado: 'error', error: (atm as any).error };
+        }
+        return { ...prev, ...(atm as any).data, estado: 'ok' };
+      });
+      this._actualizarAseguradora('provincia', (prev) => {
+        if (!provincia.ok) {
+          return { ...prev, estado: 'error', error: (provincia as any).error };
+        }
+        return { ...prev, ...(provincia as any).data, estado: 'ok' };
+      });
       this._cargando.set(false);
-    });
+      },
+    );
   }
 
   limpiar(): void {
@@ -293,6 +417,174 @@ export class CotizadorService {
         sumaAsegurada: resp.suma_asegurada,
       },
     };
+  }
+
+  private _normalizarAtm(resp: AtmCotizacionResponse): Partial<ResultadoAseguradora> {
+    const lista = resp.coberturas || [];
+
+    // Agrupar por código: nos quedamos con la opción de menor importeCuota (precio mensual)
+    const codigos = new Map<string, AtmCoberturaDto>();
+    for (const c of lista) {
+      const prev = codigos.get(c.codigo);
+      if (!prev || c.importeCuota < prev.importeCuota) {
+        codigos.set(c.codigo, c);
+      }
+    }
+
+    const coberturas: CoberturaResultado[] = [...codigos.values()]
+      .map((c): CoberturaResultado => {
+        const cod = c.codigo?.toUpperCase() || '';
+        const tieneGranizo =
+          cod === 'D' ||
+          cod.startsWith('D') ||
+          c.descripcion?.toLowerCase().includes('granizo') ||
+          false;
+
+        // ATM: requiere inspección si no es RC puro
+        const requiereInspeccion = cod !== 'A1' && cod !== 'A0' && cod !== 'A';
+
+        const beneficios = this._getBeneficiosAtm(cod, c.descripcion);
+        const descFiltro = this._humanizarNombreAtm(cod, c.descripcion);
+        const cuotas = parseInt(c.cuotas || '1', 10) || 1;
+
+        // ATM devuelve el premio TOTAL (de todas las cuotas) y el importeCuota por cuota.
+        // La UI muestra el precio mensual → usamos importeCuota como "premio" de la UI.
+        const precioMensual = c.importeCuota;
+        // Prima proporcional a la cuota (misma proporción que en el total)
+        const primaMensual = c.premio > 0 ? Number(((c.prima / c.premio) * precioMensual).toFixed(2)) : precioMensual;
+        const ivaMensual = Number((precioMensual - primaMensual).toFixed(2));
+
+        return {
+          codigoProducto: c.codigo,
+          descripcion: descFiltro,
+          premio: precioMensual,
+          prima: primaMensual,
+          iva: ivaMensual,
+          cantidadCuotas: cuotas,
+          importeCuota: precioMensual,
+          granizo: tieneGranizo,
+          requiereInspeccion,
+          beneficios,
+          codigoInterno: 0,
+          franquicia: 0,
+        };
+      })
+      .sort((a, b) => a.premio - b.premio); // menor a mayor precio
+
+    return {
+      coberturas,
+      fechaCotizacion: new Date().toISOString(),
+      vehiculo: {
+        nombre: 'Vehículo Cotizado',
+        valor: 0,
+        sumaAsegurada: 0,
+      },
+    };
+  }
+
+  private _normalizarProvincia(
+    result: ProvinciaMultiQuoteResponse['results'][number],
+  ): Partial<ResultadoAseguradora> {
+    const coberturas: CoberturaResultado[] = (result.plans || [])
+      .map((plan): CoberturaResultado => {
+        const descripcionNormalizada = this._humanizarNombreProvincia(plan.planName, plan.description);
+        const premio = plan.monthlyPremium ?? plan.annualReferencePremium ?? 0;
+        const prima = Number((premio / 1.21).toFixed(2));
+        const iva = Number((premio - prima).toFixed(2));
+        const beneficios = this._getBeneficiosProvincia(descripcionNormalizada);
+
+        return {
+          codigoProducto: plan.planId,
+          descripcion: descripcionNormalizada,
+          premio,
+          prima,
+          iva,
+          cantidadCuotas: 1,
+          importeCuota: premio,
+          granizo: beneficios.some((item) => item.toLowerCase().includes('granizo')),
+          requiereInspeccion: !descripcionNormalizada.includes('RESPONSABILIDAD CIVIL'),
+          beneficios,
+          codigoInterno: 0,
+          franquicia: 0,
+        };
+      })
+      .sort((a, b) => a.premio - b.premio);
+
+    return {
+      coberturas,
+      fechaCotizacion: result.quoteDate || new Date().toISOString(),
+      vehiculo: {
+        nombre: 'Vehículo Cotizado',
+        valor: 0,
+        sumaAsegurada: 0,
+      },
+    };
+  }
+
+  private _humanizarNombreProvincia(planName: string, description?: string): string {
+    const base = (planName || '').toUpperCase();
+    if (base.includes('TODO RIESGO') || base.includes('TR')) {
+      return `TODO RIESGO - ${planName}`;
+    }
+    if (
+      base.includes('TERCEROS') ||
+      base.includes('COMPLETO') ||
+      base.includes('ROBO') ||
+      base.includes('INCENDIO')
+    ) {
+      return `TERCEROS - ${planName}`;
+    }
+    if (base.includes('RC') || base.includes('RESPONSABILIDAD')) {
+      return `RESPONSABILIDAD CIVIL - ${planName}`;
+    }
+    return description ? `${planName} - ${description}` : planName;
+  }
+
+  private _getBeneficiosProvincia(descripcion: string): string[] {
+    const base = ['Responsabilidad Civil (Límite Legal)', 'Asistencia Jurídica'];
+    const d = descripcion.toUpperCase();
+    if (d.includes('TODO RIESGO')) {
+      return [
+        ...base,
+        'Daños Parciales por Accidente',
+        'Robo/Hurto Total y Parcial',
+        'Incendio Total y Parcial',
+        'Destrucción Total por Accidente',
+      ];
+    }
+    if (d.includes('TERCEROS')) {
+      return [...base, 'Robo/Hurto Total', 'Incendio Total', 'Destrucción Total por Accidente'];
+    }
+    return base;
+  }
+
+  private _humanizarNombreAtm(cod: string, descripcionApi: string): string {
+    const d = descripcionApi?.toUpperCase() || '';
+    if (cod === 'A0' || cod === 'A')
+      return `RESPONSABILIDAD CIVIL - ${descripcionApi || 'Responsabilidad Civil'}`;
+    if (d.includes('RIESGO') || cod.startsWith('D'))
+      return `TODO RIESGO - ${descripcionApi}`;
+    if (d.includes('ROBO') || d.includes('TERCERO') || d.includes('CLASICO'))
+      return `TERCEROS - ${descripcionApi}`;
+    return descripcionApi || cod;
+  }
+
+  private _getBeneficiosAtm(cod: string, descripcion: string): string[] {
+    const base = ['Responsabilidad Civil (Límite Legal)', 'Asistencia Jurídica'];
+    const d = descripcion?.toUpperCase() || '';
+
+    if (cod === 'A0' || cod === 'A') return base;
+
+    const extras: string[] = [];
+    if (d.includes('ROBO') && d.includes('TOTAL')) extras.push('Robo/Hurto Total');
+    if (d.includes('ROBO') && d.includes('PARCIAL')) extras.push('Robo/Hurto Parcial');
+    if (d.includes('INCENDIO')) extras.push('Incendio Total/Parcial');
+    if (d.includes('GRANIZO')) extras.push('Granizo (Sin límite)');
+    if (cod.startsWith('D') || d.includes('RIESGO')) {
+      extras.push('Daños Parciales por Accidente', 'Destrucción Total por Accidente');
+    }
+
+    return [...base, ...extras];
   }
 
   private _normalizarRus(resp: RusCotizacionResponse): Partial<ResultadoAseguradora> {

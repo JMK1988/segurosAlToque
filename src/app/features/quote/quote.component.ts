@@ -191,7 +191,15 @@ export class QuoteComponent implements OnInit {
       return;
     }
 
-    console.log('[QuoteComponent] Enviando cotización...', { ...val, cpFinal });
+    // Armar el nombre del vehículo para ATM (marca + modelo + descripcion de la versión)
+    const versionSeleccionada = this.versiones().find(
+      (v) => v.codInfoAuto === val.version,
+    );
+    const nombreVehiculo = versionSeleccionada
+      ? `${val.marca} ${val.modelo} ${versionSeleccionada.descripcion}`.trim()
+      : `${val.marca} ${val.modelo}`.trim();
+
+    console.log('[QuoteComponent] Enviando cotización...', { ...val, cpFinal, nombreVehiculo });
     this.busquedaRealizada.set(true);
 
     this.cotizadorService.cotizar({
@@ -205,6 +213,9 @@ export class QuoteComponent implements OnInit {
       },
       cuotas: 1,
       tipo_pago: 'D',
+      marca: val.marca || undefined,
+      modelo: val.modelo || undefined,
+      nombreVehiculo,
     });
   }
 

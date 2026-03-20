@@ -5,7 +5,7 @@
 // ============================================================
 
 /** Aseguradoras integradas */
-export type AseguradoraId = 'ma' | 'rus'; // 'ma' = Mercantil Andina, 'rus' = RUS
+export type AseguradoraId = 'ma' | 'rus' | 'atm' | 'provincia'; // 'ma' = Mercantil Andina, 'rus' = RUS, 'atm' = ATM Seguros, 'provincia' = Provincia Seguros
 
 /** Estado de carga por aseguradora */
 export type EstadoCotizacion = 'idle' | 'cargando' | 'ok' | 'error';
@@ -32,6 +32,12 @@ export interface DatosCotizacion {
   cuotas: number;
   /** D = débito/tarjeta */
   tipo_pago: 'D' | 'C';
+  /** Marca textual seleccionada en el widget/formulario (ej: "TOYOTA") */
+  marca?: string;
+  /** Modelo textual seleccionado en el widget/formulario (ej: "ETIOS") */
+  modelo?: string;
+  /** Nombre completo del vehículo (ej: "RENAULT CLIO 2 F2 1.6 5P."), usado para buscar en ATM */
+  nombreVehiculo?: string;
 }
 
 // ── Resultado normalizado ─────────────────────────────────────

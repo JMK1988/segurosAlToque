@@ -14,7 +14,13 @@ src/app/core/
 
 ---
 
-## Aseguradora activa: Mercantil Andina (MA)
+## Aseguradoras activas
+
+| Id | Nombre | Protocolo |
+|----|--------|-----------|
+| `ma` | Mercantil Andina | REST/JSON |
+| `rus` | RUS (Río Uruguay Seguros) | REST/JSON |
+| `atm` | ATM Seguros | REST/JSON (el backend traduce SOAP/XML) |
 
 | Campo | Valor |
 |-------|-------|
@@ -22,12 +28,54 @@ src/app/core/
 | **Swagger** | `https://api-segurosaltoque.onrender.com/swagger/index.html` |
 | **Protocolo** | REST / JSON |
 
-### Endpoints
+### Endpoints principales
 
-| Método | Ruta | Descripción |
+| Método | Ruta | Aseguradora |
 |--------|------|-------------|
-| `GET` | `/version` | Versión del servicio InfoAuto |
-| `POST` | `/cotizar` | Obtiene cotizaciones de coberturas |
+| `GET` | `/api/MA/marcas` | MA - Marcas |
+| `GET` | `/api/MA/modelos?marca=X` | MA - Modelos |
+| `GET` | `/api/MA/versiones?marca=X&modelo=Y` | MA - Versiones |
+| `POST` | `/api/Cotizacion/mercantilandina/test` | MA - Cotización |
+| `PUT` | `/api/Rus` | RUS - Cotización |
+| `POST` | `/api/Atm/cotizar` | ATM - Cotización |
+| `GET` | `/api/Atm/buscar-vehiculo?descripcion=X` | ATM - Búsqueda vehículo |
+
+### ATM – Request (`POST /api/Atm/cotizar`)
+
+```json
+{
+  "marca": "",
+  "modelo": "",
+  "anioFab": "2020",
+  "codPostal": "1407",
+  "ceroKm": "N",
+  "alarma": "0",
+  "gnc": "0"
+}
+```
+
+### ATM – Response (JSON, traducido desde SOAP/XML por el backend)
+
+```json
+{
+  "operacion": "857",
+  "statusSuccess": "TRUE",
+  "cotizacion": {
+    "cobertura": [
+      {
+        "codigo": "A0",
+        "descripcion": "RESPONSABILIDAD CIVIL",
+        "prima": 340.77,
+        "premio": 423.91,
+        "cuotas": "01",
+        "impcuotas": 423.91,
+        "formapago": "TARJETA",
+        "plan_cot": "02"
+      }
+    ]
+  }
+}
+```
 
 ### Coberturas disponibles (MA)
 

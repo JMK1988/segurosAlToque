@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { RusCotizacionRequestDto, RusCotizacionResponse } from '../models/rus-cotizador.models';
 
 const BASE_URL = '/api-proxy';
@@ -18,6 +18,22 @@ export class RusCotizadorService {
     return this.http.put<RusCotizacionResponse>(`${BASE_URL}/api/Rus`, request, {
       headers: this.headers,
     });
+  }
+
+  /** GET /api/Rus/VersionToCodia?version={version} */
+  versionToCodia(version: string): Observable<number | null> {
+    return this.http
+      .get<{ codia?: number } | number | null>(`${BASE_URL}/api/Rus/VersionToCodia`, {
+        params: { version },
+        headers: { Accept: 'application/json' },
+      })
+      .pipe(
+        map((resp) => {
+          if (typeof resp === 'number') return resp;
+          if (resp && typeof resp.codia === 'number') return resp.codia;
+          return null;
+        }),
+      );
   }
 
   /** Helper: Arma el request con la estructura requerida por RUS */

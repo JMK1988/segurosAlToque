@@ -180,7 +180,7 @@
       </div>
 
       <div class="resultados-grid">
-        @for (cobertura of coberturasFiltradas(); track cobertura.codigoInterno) {
+        @for (cobertura of coberturasFiltradas(); track (cobertura.aseguradora + '_' + cobertura.codigoProducto)) {
         <div class="cobertura-card">
           <div class="card-header">
             <span class="aseguradora-badge">{{ cobertura.nombreAseguradora }}</span>
