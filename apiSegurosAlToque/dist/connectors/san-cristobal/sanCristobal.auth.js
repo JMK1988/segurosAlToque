@@ -6,19 +6,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSanCristobalToken = getSanCristobalToken;
 const axios_1 = __importDefault(require("axios"));
 const env_1 = require("../../config/env");
+const sanCristobalUrl_1 = require("../../utils/sanCristobalUrl");
 let tokenCache = null;
 async function getSanCristobalToken() {
     if (tokenCache && Date.now() < tokenCache.expiresAt) {
         return tokenCache.value;
     }
-    const response = await axios_1.default.post(`${env_1.env.sanCristobal.baseUrl}/b2b-gateway/api/Auth/LoginAsync`, {
+    const response = await axios_1.default.post((0, sanCristobalUrl_1.joinSanCristobalUrl)(env_1.env.sanCristobal.baseUrl, "/b2b-gateway/api/Auth/LoginAsync"), {
         userName: env_1.env.sanCristobal.username,
         password: env_1.env.sanCristobal.password
     }, {
         headers: {
             "Content-Type": "application/json"
         },
-        timeout: 15000
+        // Mismo orden de magnitud que la cotización: LoginAsync a veces supera 15s (cold start / red lenta).
+        timeout: 45000
     });
     const data = response.data;
     const token = data.Auth_Token || data.Id;

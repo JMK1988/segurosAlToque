@@ -21,6 +21,17 @@ export interface MultiQuoteRequest {
     insuredValue: number;
     accessoriesAmount?: number;
     infoAutoCode?: string;
+    /** Si no se envía, San Cristóbal asume nacional (true). */
+    isNational?: boolean;
+    /** Texto del vehículo (ej. nombre completo) para inferir categoría/combustible en San Cristóbal. */
+    vehicleNameHint?: string;
+    /** TypeList Categories (ej. Car, Car4x4, DoubleCabPickup). */
+    categoryCode?: string;
+    fuelTypeCode?: string;
+    colorCode?: string;
+    gnc?: boolean;
+    /** % ajuste automático (TypeList AutomaticAdjustVehicles), ej. 10 */
+    automaticAdjustPercent?: number | string;
   };
   policy: {
     startDateCode?: string;

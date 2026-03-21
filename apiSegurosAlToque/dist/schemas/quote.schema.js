@@ -21,7 +21,15 @@ exports.multiQuoteSchema = zod_1.z.object({
         vehicleTypeCode: zod_1.z.string().min(1),
         isZeroKm: zod_1.z.boolean(),
         insuredValue: zod_1.z.number().positive(),
-        accessoriesAmount: zod_1.z.number().min(0).optional()
+        accessoriesAmount: zod_1.z.number().min(0).optional(),
+        infoAutoCode: zod_1.z.string().optional(),
+        isNational: zod_1.z.boolean().optional(),
+        vehicleNameHint: zod_1.z.string().optional(),
+        categoryCode: zod_1.z.string().optional(),
+        fuelTypeCode: zod_1.z.string().optional(),
+        colorCode: zod_1.z.string().optional(),
+        gnc: zod_1.z.boolean().optional(),
+        automaticAdjustPercent: zod_1.z.union([zod_1.z.number(), zod_1.z.string()]).optional()
     }),
     policy: zod_1.z.object({
         startDateCode: zod_1.z.string().optional(),

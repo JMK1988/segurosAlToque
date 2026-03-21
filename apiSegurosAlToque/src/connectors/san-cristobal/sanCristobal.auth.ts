@@ -1,5 +1,6 @@
 import axios from "axios";
 import { env } from "../../config/env";
+import { joinSanCristobalUrl } from "../../utils/sanCristobalUrl";
 
 interface TokenCache {
   value: string;
@@ -19,7 +20,7 @@ export async function getSanCristobalToken(): Promise<string> {
     Expires_In?: number;
     Refresh_Token?: string;
   }>(
-    `${env.sanCristobal.baseUrl}/b2b-gateway/api/Auth/LoginAsync`,
+    joinSanCristobalUrl(env.sanCristobal.baseUrl, "/b2b-gateway/api/Auth/LoginAsync"),
     {
       userName: env.sanCristobal.username,
       password: env.sanCristobal.password
@@ -28,7 +29,8 @@ export async function getSanCristobalToken(): Promise<string> {
       headers: {
         "Content-Type": "application/json"
       },
-      timeout: 15000
+      // Mismo orden de magnitud que la cotización: LoginAsync a veces supera 15s (cold start / red lenta).
+      timeout: 45000
     }
   );
 

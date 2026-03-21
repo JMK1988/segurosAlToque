@@ -1,0 +1,1225 @@
+{
+  "fetchedAt": "2026-03-21T15:01:21.649Z",
+  "baseUrl": "https://api-uat.sancristobalonline.com.ar",
+  "summary": [
+    {
+      "name": "TypeList/CA7ProductOffering",
+      "status": 200,
+      "values": 11
+    },
+    {
+      "name": "TypeList/Product",
+      "status": 200,
+      "values": 16
+    },
+    {
+      "name": "TypeList/Usage",
+      "status": 200,
+      "values": 18
+    },
+    {
+      "name": "TypeList/Categories",
+      "status": 200,
+      "values": 34
+    },
+    {
+      "name": "TypeList/Colors",
+      "status": 200,
+      "values": 16
+    },
+    {
+      "name": "TypeList/FuelTypes",
+      "status": 200,
+      "values": 5
+    },
+    {
+      "name": "TypeList/AutomaticAdjustVehicles",
+      "status": 200,
+      "values": 11
+    },
+    {
+      "name": "TypeList/AutomaticAdjustSum",
+      "status": 200,
+      "values": 13
+    },
+    {
+      "name": "TypeList/VehicleAccesories",
+      "status": 200,
+      "values": 33
+    },
+    {
+      "name": "TypeList/AdditionalFuelType",
+      "status": 200,
+      "values": 2
+    },
+    {
+      "name": "TypeList/GPSProvider",
+      "status": 200,
+      "values": 21
+    },
+    {
+      "name": "TypeList/Jurisdiction",
+      "status": 200,
+      "values": 2
+    },
+    {
+      "name": "TypeList/OfficialIDType",
+      "status": 200,
+      "values": 8
+    },
+    {
+      "name": "TypeList/GenderType",
+      "status": 200,
+      "values": 2
+    },
+    {
+      "name": "TypeList/ChannelEntry",
+      "status": 200,
+      "values": 10
+    },
+    {
+      "name": "TypeList/PaymentType",
+      "status": 200,
+      "values": 1
+    },
+    {
+      "name": "TypeList/Term",
+      "status": 200,
+      "values": 12
+    },
+    {
+      "name": "TypeList/PolicyType",
+      "status": 400,
+      "note": "{\"failureReason\":\"Value cannot be null. (Parameter 'filter')\"}"
+    },
+    {
+      "name": "Postal.ProvinciasArgentinas",
+      "status": 200,
+      "values": "—"
+    }
+  ],
+  "results": {
+    "TypeList/CA7ProductOffering": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "CA7_A",
+            "Description": "Responsabilidad civil únicamente"
+          },
+          {
+            "Code": "CA7_B",
+            "Description": "Destrucción total por accidente o incendio y robo total de la unidad asegurada"
+          },
+          {
+            "Code": "CA7_B1",
+            "Description": "Destrucción total por incendio y robo total de la unidad asegurada"
+          },
+          {
+            "Code": "CA7_B3",
+            "Description": "Robo total de la unidad asegurada"
+          },
+          {
+            "Code": "CA7_Basic",
+            "Description": "CA7 Basic"
+          },
+          {
+            "Code": "CA7_C",
+            "Description": "Destrucción total por accidente, total y parcial por incendio y robo o hurto"
+          },
+          {
+            "Code": "CA7_CPlus",
+            "Description": "Destrucción total por accidente, total y parcial por incendio y robo o hurto"
+          },
+          {
+            "Code": "CA7_C1",
+            "Description": "Destrucción total/parcial por incendio y robo o hurto"
+          },
+          {
+            "Code": "CA7_C4",
+            "Description": "Destrucción total/parcial por incendio y total por robo o hurto"
+          },
+          {
+            "Code": "CA7_CM",
+            "Description": "Destrucción total por accidente, total y parcial por incendio y robo o hurto"
+          },
+          {
+            "Code": "CA7_D",
+            "Description": "Todo riesgo"
+          }
+        ]
+      }
+    },
+    "TypeList/Product": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "PersonalAccidents",
+            "Description": "Accidentes personales"
+          },
+          {
+            "Code": "CA7CommAuto",
+            "Description": "Automotores"
+          },
+          {
+            "Code": "HullAndAircraft",
+            "Description": "Casco"
+          },
+          {
+            "Code": "Caution",
+            "Description": "Caución"
+          },
+          {
+            "Code": "Combined",
+            "Description": "Combinado"
+          },
+          {
+            "Code": "Fire",
+            "Description": "Incendio"
+          },
+          {
+            "Code": "OtherRisk",
+            "Description": "Otros Riesgos"
+          },
+          {
+            "Code": "GeneralLiability_GLE",
+            "Description": "Responsabilidad general"
+          },
+          {
+            "Code": "Agriculture",
+            "Description": "Riesgos Agropecuarios"
+          },
+          {
+            "Code": "Theft",
+            "Description": "Robo"
+          },
+          {
+            "Code": "Technical",
+            "Description": "Seguro Técnico"
+          },
+          {
+            "Code": "Sepelio",
+            "Description": "Sepelio"
+          },
+          {
+            "Code": "AllRisk",
+            "Description": "Todo Riesgo Operativo"
+          },
+          {
+            "Code": "InlandMarine",
+            "Description": "Transporte"
+          },
+          {
+            "Code": "CollectiveLife",
+            "Description": "Vida Colectivo"
+          },
+          {
+            "Code": "IndividualLife",
+            "Description": "Vida Individual"
+          }
+        ]
+      }
+    },
+    "TypeList/Usage": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "Ambulance",
+            "Description": "Ambulancia"
+          },
+          {
+            "Code": "AssistanceAndTowing",
+            "Description": "Auxilio y Remolque"
+          },
+          {
+            "Code": "Comercial",
+            "Description": "Comercial"
+          },
+          {
+            "Code": "ComercialRentWithoutDriver",
+            "Description": "Comercial - Alquiler Sin Chofer"
+          },
+          {
+            "Code": "ComercialIndustrial",
+            "Description": "Comercial - Industrial"
+          },
+          {
+            "Code": "ComercialRural",
+            "Description": "Comercial - Rural"
+          },
+          {
+            "Code": "ComercialOilTransportingLoads",
+            "Description": "Comercial - Transporte de Cargas Actividad Petrolera"
+          },
+          {
+            "Code": "ComercialGeneralTransportingLoads",
+            "Description": "Comercial - Transporte de Cargas Generales"
+          },
+          {
+            "Code": "ComercialDangerousTransportingLoads",
+            "Description": "Comercial - Transporte de Cargas Peligrosas"
+          },
+          {
+            "Code": "ComercialRuralTransportingLoads",
+            "Description": "Comercial - Transporte de Cargas Rural"
+          },
+          {
+            "Code": "SecurityForces",
+            "Description": "Fuerzas de Seguridad (Policia/Fuerzas Armadas/Bomberos)"
+          },
+          {
+            "Code": "Personal",
+            "Description": "Particular"
+          },
+          {
+            "Code": "WasteCollector",
+            "Description": "Recolector de Residuos"
+          },
+          {
+            "Code": "Remise",
+            "Description": "Remise"
+          },
+          {
+            "Code": "Taxi",
+            "Description": "Taxímetro"
+          },
+          {
+            "Code": "PersonalWork",
+            "Description": "Trabajo Personal"
+          },
+          {
+            "Code": "PassengerTranspSpecialServices",
+            "Description": "Transporte de pasajeros/Servicios Especiales"
+          },
+          {
+            "Code": "SchoolTransport",
+            "Description": "Transporte Escolar"
+          }
+        ]
+      }
+    },
+    "TypeList/Categories": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "Trailer",
+            "Description": "Acopladito/Trailer"
+          },
+          {
+            "Code": "Semitrailer",
+            "Description": "Acoplado/Semirremolque"
+          },
+          {
+            "Code": "Car",
+            "Description": "Automóvil"
+          },
+          {
+            "Code": "CriticalCar",
+            "Description": "Automóvil Crítico"
+          },
+          {
+            "Code": "TruckUpTo3point5TT",
+            "Description": "Camión Hasta 3.5 TT"
+          },
+          {
+            "Code": "TruckUpTo7TT",
+            "Description": "Camión Hasta 7 TT"
+          },
+          {
+            "Code": "TruckOver3point5TT",
+            "Description": "Camión Más de 3.5 TT"
+          },
+          {
+            "Code": "TruckOver7TT",
+            "Description": "Camión Más de 7 TT"
+          },
+          {
+            "Code": "Motorhome",
+            "Description": "Casa Rodante con propulsión"
+          },
+          {
+            "Code": "TravelTrailer",
+            "Description": "Casa Rodante sin propulsión"
+          },
+          {
+            "Code": "Quad-UTV",
+            "Description": "Quad /UTV"
+          },
+          {
+            "Code": "Electric",
+            "Description": "Electric"
+          },
+          {
+            "Code": "Car4x4",
+            "Description": "Familiar tipo 4 x 4"
+          },
+          {
+            "Code": "MachineryWithPropulsion",
+            "Description": "Maquinaria con propulsión"
+          },
+          {
+            "Code": "MachineryWithoutPropulsion",
+            "Description": "Maquinaria sin propulsión"
+          },
+          {
+            "Code": "MinibusUpTo8Seats",
+            "Description": "Minibus hasta 8 asientos"
+          },
+          {
+            "Code": "MinibusOver8Seats",
+            "Description": "Minibus más de 8 asientos"
+          },
+          {
+            "Code": "MotorcycleBetween150-300CC",
+            "Description": "Motorcycle Between151 and 300CC"
+          },
+          {
+            "Code": "MotorcycleBetween300-600CC",
+            "Description": "Motorcycle Between301 and 600CC"
+          },
+          {
+            "Code": "MotorcycleLess150CC",
+            "Description": "Motorcycles up to 150CC"
+          },
+          {
+            "Code": "MotorcycleOver600CC",
+            "Description": "Motorcycle Over 601CC"
+          },
+          {
+            "Code": "MotorcycleBetween125CC-350CC",
+            "Description": "Moto/Cuatriciclo entre 125-350 CC"
+          },
+          {
+            "Code": "MotorcycleUpTo150CC",
+            "Description": "Moto/Cuatriciclo hasta 150 CC"
+          },
+          {
+            "Code": "MotorcycleOver150CC",
+            "Description": "Moto/Cuatriciclo mayor de 150 CC"
+          },
+          {
+            "Code": "MotorcycleOver350CC",
+            "Description": "Moto/Cuatriciclo mayor de 350 CC"
+          },
+          {
+            "Code": "MotorcycleUpTo125CC",
+            "Description": "Moto/Cuatriciclo menos de 125 CC"
+          },
+          {
+            "Code": "OmnibusOver5TT",
+            "Description": "Omnibus más de 5 TT"
+          },
+          {
+            "Code": "PickupOpen",
+            "Description": "Pick up caja abierta"
+          },
+          {
+            "Code": "PickupBoxcar",
+            "Description": "Pick up furgón"
+          },
+          {
+            "Code": "Pickup",
+            "Description": "Pickup (Crítica)"
+          },
+          {
+            "Code": "DoubleCabPickup",
+            "Description": "Pickup A o doble cabina"
+          },
+          {
+            "Code": "SingleCabPickup",
+            "Description": "Pickup B"
+          },
+          {
+            "Code": "Tractor",
+            "Description": "Tractor"
+          },
+          {
+            "Code": "LightUtility",
+            "Description": "Utilitario Liviano"
+          }
+        ]
+      }
+    },
+    "TypeList/Colors": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "Yellow",
+            "Description": "Amarillo"
+          },
+          {
+            "Code": "Blue",
+            "Description": "Azul"
+          },
+          {
+            "Code": "LightBlue",
+            "Description": "Azul Celeste"
+          },
+          {
+            "Code": "Beige",
+            "Description": "Beige"
+          },
+          {
+            "Code": "White",
+            "Description": "Blanco"
+          },
+          {
+            "Code": "Bordeaux",
+            "Description": "Bordeaux"
+          },
+          {
+            "Code": "Golden",
+            "Description": "Dorado"
+          },
+          {
+            "Code": "LightGray",
+            "Description": "Gris Claro"
+          },
+          {
+            "Code": "DarkGray",
+            "Description": "Gris Oscuro"
+          },
+          {
+            "Code": "Brown",
+            "Description": "Marrón"
+          },
+          {
+            "Code": "Orange",
+            "Description": "Naranja"
+          },
+          {
+            "Code": "Black",
+            "Description": "Negro"
+          },
+          {
+            "Code": "Red",
+            "Description": "Rojo"
+          },
+          {
+            "Code": "LightGreen",
+            "Description": "Verde Claro"
+          },
+          {
+            "Code": "DarkGreen",
+            "Description": "Verde Oscuro"
+          },
+          {
+            "Code": "Unspecified",
+            "Description": "Sin especificar"
+          }
+        ]
+      }
+    },
+    "TypeList/FuelTypes": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "DIE",
+            "Description": "Diesel"
+          },
+          {
+            "Code": "ELE",
+            "Description": "Eléctrico"
+          },
+          {
+            "Code": "HIB",
+            "Description": "Híbrido"
+          },
+          {
+            "Code": "NAF",
+            "Description": "Nafta"
+          },
+          {
+            "Code": "WOF",
+            "Description": "Sin Combustible"
+          }
+        ]
+      }
+    },
+    "TypeList/AutomaticAdjustVehicles": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "0",
+            "Description": "0%"
+          },
+          {
+            "Code": "10",
+            "Description": "10%  (up to 250 days)"
+          },
+          {
+            "Code": "15",
+            "Description": "15% (up to 250 days)"
+          },
+          {
+            "Code": "20",
+            "Description": "20%"
+          },
+          {
+            "Code": "30",
+            "Description": "30% (over 250 days)"
+          },
+          {
+            "Code": "40",
+            "Description": "40% (1 a 250 days) "
+          },
+          {
+            "Code": "5",
+            "Description": "5%"
+          },
+          {
+            "Code": "50",
+            "Description": "50%"
+          },
+          {
+            "Code": "60",
+            "Description": "60%"
+          },
+          {
+            "Code": "70",
+            "Description": "70%"
+          },
+          {
+            "Code": "80",
+            "Description": "80%"
+          }
+        ]
+      }
+    },
+    "TypeList/AutomaticAdjustSum": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "percZero",
+            "Description": "0%"
+          },
+          {
+            "Code": "percTen",
+            "Description": "10%"
+          },
+          {
+            "Code": "percFifteen",
+            "Description": "15%"
+          },
+          {
+            "Code": "percTwenty",
+            "Description": "20%"
+          },
+          {
+            "Code": "percTwentyFive",
+            "Description": "25%"
+          },
+          {
+            "Code": "percThirty",
+            "Description": "30%"
+          },
+          {
+            "Code": "percForty",
+            "Description": "40%"
+          },
+          {
+            "Code": "percFifty",
+            "Description": "50 %"
+          },
+          {
+            "Code": "percSixty",
+            "Description": "60%"
+          },
+          {
+            "Code": "percSeventy",
+            "Description": "70%"
+          },
+          {
+            "Code": "percEighty",
+            "Description": "80%"
+          },
+          {
+            "Code": "percNinety",
+            "Description": "90%"
+          },
+          {
+            "Code": "percOneHundred",
+            "Description": "100%"
+          }
+        ]
+      }
+    },
+    "TypeList/VehicleAccesories": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "airConditiner",
+            "Description": "Acondicionador de Aire"
+          },
+          {
+            "Code": "alarm",
+            "Description": "Alarma"
+          },
+          {
+            "Code": "crystalLift",
+            "Description": "Alza cristal"
+          },
+          {
+            "Code": "seat",
+            "Description": "Asiento / Butaca"
+          },
+          {
+            "Code": "antiRollBar",
+            "Description": "Barra antivuelco"
+          },
+          {
+            "Code": "safetyShield",
+            "Description": "Blindaje de Seguridad"
+          },
+          {
+            "Code": "agriculturalHead",
+            "Description": "Cabezal Agrícola"
+          },
+          {
+            "Code": "cabin",
+            "Description": "Cabina"
+          },
+          {
+            "Code": "chargingCase",
+            "Description": "Caja de Carga"
+          },
+          {
+            "Code": "electronicClosure",
+            "Description": "Cierre Electrónico"
+          },
+          {
+            "Code": "CNGCylinder",
+            "Description": "Cilindro GNC/GLP"
+          },
+          {
+            "Code": "coverOfBox",
+            "Description": "Cobertor de Caja"
+          },
+          {
+            "Code": "tires_Ext",
+            "Description": "Tires"
+          },
+          {
+            "Code": "truckCap",
+            "Description": "Cúpula"
+          },
+          {
+            "Code": "refrigerationEquipment",
+            "Description": "Equipo de Refrigeración"
+          },
+          {
+            "Code": "stirrup",
+            "Description": "Estribo"
+          },
+          {
+            "Code": "auxiliaryOptics",
+            "Description": "Faro / Óptica auxiliar"
+          },
+          {
+            "Code": "wagon",
+            "Description": "Furgón"
+          },
+          {
+            "Code": "specialTires",
+            "Description": "Llantas Especiales"
+          },
+          {
+            "Code": "canvas",
+            "Description": "Lonas"
+          },
+          {
+            "Code": "engine",
+            "Description": "Motor"
+          },
+          {
+            "Code": "agriculturalPlatform",
+            "Description": "Plataforma Agrícola"
+          },
+          {
+            "Code": "engagementPlate",
+            "Description": "Plato de Enganche"
+          },
+          {
+            "Code": "CNGRegulator",
+            "Description": "Regulador GNC/GLP"
+          },
+          {
+            "Code": "parkingSensorCam",
+            "Description": "Sensor de estacionamiento (con Cámara)"
+          },
+          {
+            "Code": "parkingSensor",
+            "Description": "Sensor de estacionamiento (sin Cámara)"
+          },
+          {
+            "Code": "motorSupervisor",
+            "Description": "Supervisor de Motor (tipo vigía)"
+          },
+          {
+            "Code": "tiresSupervisor",
+            "Description": "Supervisor de Neumáticos (tipo vigía)"
+          },
+          {
+            "Code": "tank",
+            "Description": "Tanque"
+          },
+          {
+            "Code": "window",
+            "Description": "Ventanilla / Vidrio / Cristal"
+          },
+          {
+            "Code": "other",
+            "Description": "Otros"
+          },
+          {
+            "Code": "camper",
+            "Description": "Camper"
+          },
+          {
+            "Code": "plank",
+            "Description": "Plancha"
+          }
+        ]
+      }
+    },
+    "TypeList/AdditionalFuelType": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "GLP",
+            "Description": "GLP"
+          },
+          {
+            "Code": "GNC",
+            "Description": "GNC"
+          }
+        ]
+      }
+    },
+    "TypeList/GPSProvider": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "AMERICAGIS",
+            "Description": "AMERICA GIS"
+          },
+          {
+            "Code": "americanTracerSA",
+            "Description": "American Tracer S.A"
+          },
+          {
+            "Code": "chevroletOnStar",
+            "Description": "Chevrolet OnStar"
+          },
+          {
+            "Code": "colSA",
+            "Description": "Col S.A."
+          },
+          {
+            "Code": "CUSAT",
+            "Description": "CUSAT"
+          },
+          {
+            "Code": "dorsacSRL",
+            "Description": "Dorsac S.R.L."
+          },
+          {
+            "Code": "DVLSatelital",
+            "Description": "DVL Satelital"
+          },
+          {
+            "Code": "EasyMailSA",
+            "Description": "Easy Mail S.A."
+          },
+          {
+            "Code": "HawkTrackerSA",
+            "Description": "Hawk Tracker S.A."
+          },
+          {
+            "Code": "InfotrakSRL",
+            "Description": "Infotrak S.R.L."
+          },
+          {
+            "Code": "LoJack",
+            "Description": "Lo Jack (Car Security S.A.)"
+          },
+          {
+            "Code": "MegatransSA",
+            "Description": "Megatrans S.A."
+          },
+          {
+            "Code": "PointerSA",
+            "Description": "Pointer S.A."
+          },
+          {
+            "Code": "PressaSA",
+            "Description": "Pressa S.A."
+          },
+          {
+            "Code": "SeguimientoGlobalSRL",
+            "Description": "Seguimiento Global S.R.L"
+          },
+          {
+            "Code": "SiacSRL",
+            "Description": "Siac S.R.L."
+          },
+          {
+            "Code": "SILSTECHSAS",
+            "Description": "SILSTECH S.A.S."
+          },
+          {
+            "Code": "SitrackcomSA",
+            "Description": "Sitrack.com S.A."
+          },
+          {
+            "Code": "StopSatSRL",
+            "Description": "Stop Sat S.R.L."
+          },
+          {
+            "Code": "TrailbackSA",
+            "Description": "Trailback S.A."
+          },
+          {
+            "Code": "UbicarSRL",
+            "Description": "Ubicar S.R.L."
+          }
+        ]
+      }
+    },
+    "TypeList/Jurisdiction": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "national",
+            "Description": "Jurisdicción Nacional"
+          },
+          {
+            "Code": "other",
+            "Description": "Otras Jurisdicciones"
+          }
+        ]
+      }
+    },
+    "TypeList/OfficialIDType": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "Ext_DNI96",
+            "Description": "DOCUMENTO NACIONAL IDENTIDAD"
+          },
+          {
+            "Code": "Ext_CUIT80",
+            "Description": "C.U.I.T."
+          },
+          {
+            "Code": "Ext_CUIL86",
+            "Description": "CLAVE UNICA DE IDENTIFICACION LABORAL "
+          },
+          {
+            "Code": "Ext_CPF00",
+            "Description": "C.I. Policía Federal"
+          },
+          {
+            "Code": "Ext_LE89",
+            "Description": "L.E."
+          },
+          {
+            "Code": "Ext_LC90",
+            "Description": "L.C."
+          },
+          {
+            "Code": "Ext_PAS94",
+            "Description": "Pasaporte"
+          },
+          {
+            "Code": "Ext_Otros",
+            "Description": "Otros"
+          }
+        ]
+      }
+    },
+    "TypeList/GenderType": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "F",
+            "Description": "Femenino"
+          },
+          {
+            "Code": "M",
+            "Description": "Masculino"
+          }
+        ]
+      }
+    },
+    "TypeList/ChannelEntry": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "B2B",
+            "Description": "B2B"
+          },
+          {
+            "Code": "BillingCenter",
+            "Description": "Billing Center"
+          },
+          {
+            "Code": "CRM",
+            "Description": "CRM"
+          },
+          {
+            "Code": "ISOL",
+            "Description": "ISOL"
+          },
+          {
+            "Code": "PolicyCenter",
+            "Description": "Policy Center"
+          },
+          {
+            "Code": "Portal",
+            "Description": "Portal"
+          },
+          {
+            "Code": "PortalCS",
+            "Description": "Portal - Cross Selling"
+          },
+          {
+            "Code": "PortalTD",
+            "Description": "Portal - TD"
+          },
+          {
+            "Code": "SpecialInsurance",
+            "Description": "Seguros Especiales"
+          },
+          {
+            "Code": "OnlineSale",
+            "Description": "Venta Online"
+          }
+        ]
+      }
+    },
+    "TypeList/PaymentType": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "CBU",
+            "Description": "CBU"
+          }
+        ]
+      }
+    },
+    "TypeList/Term": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "Values": [
+          {
+            "Code": "Annual",
+            "Description": "plazo anual"
+          },
+          {
+            "Code": "HalfYear",
+            "Description": "Plazo de 6 meses"
+          },
+          {
+            "Code": "ThreeYear",
+            "Description": "Tres Años de Pago Completo"
+          },
+          {
+            "Code": "FiveYears",
+            "Description": "Cinco Años"
+          },
+          {
+            "Code": "TenYears",
+            "Description": "Diez Años"
+          },
+          {
+            "Code": "Ext_Trimester",
+            "Description": "3 months term"
+          },
+          {
+            "Code": "Ext_FourMonths",
+            "Description": "4 meses"
+          },
+          {
+            "Code": "Ext_TwoYears",
+            "Description": "2 años"
+          },
+          {
+            "Code": "Ext_ThreeYears",
+            "Description": "3 años"
+          },
+          {
+            "Code": "Ext_RefacturacionMonth",
+            "Description": "Refacturacion Mensual"
+          },
+          {
+            "Code": "Ext_RefacturacionTrimester",
+            "Description": "Refacturacion Trimestral"
+          },
+          {
+            "Code": "Other",
+            "Description": "Otro plazo"
+          }
+        ]
+      }
+    },
+    "TypeList/PolicyType": {
+      "ok": false,
+      "status": 400,
+      "error": "{\"failureReason\":\"Value cannot be null. (Parameter 'filter')\"}"
+    },
+    "Postal.ProvinciasArgentinas": {
+      "ok": true,
+      "status": 200,
+      "data": {
+        "CodigoValorDTO": [
+          {
+            "Codigo": "AR_02",
+            "Valor": "BUENOS AIRES"
+          },
+          {
+            "Codigo": "AR_23",
+            "Valor": "CAPITAL FEDERAL"
+          },
+          {
+            "Codigo": "AR_20",
+            "Valor": "CATAMARCA"
+          },
+          {
+            "Codigo": "AR_08",
+            "Valor": "CHACO"
+          },
+          {
+            "Codigo": "AR_11",
+            "Valor": "CHUBUT"
+          },
+          {
+            "Codigo": "AR_15",
+            "Valor": "CORRIENTES"
+          },
+          {
+            "Codigo": "AR_03",
+            "Valor": "CÓRDOBA"
+          },
+          {
+            "Codigo": "AR_05",
+            "Valor": "ENTRE RÍOS"
+          },
+          {
+            "Codigo": "AR_06",
+            "Valor": "FORMOSA"
+          },
+          {
+            "Codigo": "AR_10",
+            "Valor": "JUJUY"
+          },
+          {
+            "Codigo": "AR_16",
+            "Valor": "LA PAMPA"
+          },
+          {
+            "Codigo": "AR_18",
+            "Valor": "LA RIOJA"
+          },
+          {
+            "Codigo": "AR_13",
+            "Valor": "MENDOZA"
+          },
+          {
+            "Codigo": "AR_09",
+            "Valor": "MISIONES"
+          },
+          {
+            "Codigo": "AR_17",
+            "Valor": "NEUQUÉN"
+          },
+          {
+            "Codigo": "AR_26",
+            "Valor": "OTROS"
+          },
+          {
+            "Codigo": "AR_14",
+            "Valor": "RÍO NEGRO"
+          },
+          {
+            "Codigo": "AR_01",
+            "Valor": "SALTA"
+          },
+          {
+            "Codigo": "AR_21",
+            "Valor": "SAN JUAN"
+          },
+          {
+            "Codigo": "AR_12",
+            "Valor": "SAN LUIS"
+          },
+          {
+            "Codigo": "AR_24",
+            "Valor": "SANTA CRUZ"
+          },
+          {
+            "Codigo": "AR_19",
+            "Valor": "SANTA FE"
+          },
+          {
+            "Codigo": "AR_04",
+            "Valor": "SANTIAGO DEL ESTERO"
+          },
+          {
+            "Codigo": "AR_22",
+            "Valor": "TIERRA DE FUEGO"
+          },
+          {
+            "Codigo": "AR_07",
+            "Valor": "TUCUMÁN"
+          }
+        ],
+        "HasError": false,
+        "HasWarning": false,
+        "HasInformation": true,
+        "Messages": [
+          {
+            "NombreServicio": "",
+            "VersionServicio": "",
+            "Description": "Se completó correctamente la busqueda de las provincias",
+            "MessageBeautiful": " ",
+            "StackTrace": null,
+            "ErrorLevel": 0
+          }
+        ]
+      }
+    }
+  }
+}

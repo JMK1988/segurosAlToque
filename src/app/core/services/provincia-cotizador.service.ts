@@ -254,6 +254,9 @@ export class ProvinciaCotizadorService {
         insuredValue: 20000000,
         accessoriesAmount: 0,
         infoAutoCode: params.datos.vehiculo.infoauto?.toString() || '',
+        isNational: !params.datos.nombreVehiculo?.toUpperCase().includes('IMPORTADO'),
+        vehicleNameHint: params.datos.nombreVehiculo,
+        gnc: params.datos.vehiculo.gnc,
       },
       policy: {
         startDateCode: 'E',

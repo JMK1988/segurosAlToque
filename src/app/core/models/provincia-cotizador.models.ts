@@ -19,6 +19,14 @@ export interface ProvinciaMultiQuoteRequest {
     insuredValue: number;
     accessoriesAmount?: number;
     infoAutoCode?: string;
+    /** false = importado (San Cristóbal). */
+    isNational?: boolean;
+    vehicleNameHint?: string;
+    categoryCode?: string;
+    fuelTypeCode?: string;
+    colorCode?: string;
+    gnc?: boolean;
+    automaticAdjustPercent?: number | string;
   };
   policy: {
     startDateCode?: string;

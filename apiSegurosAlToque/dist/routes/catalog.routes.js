@@ -7,3 +7,4 @@ exports.catalogRouter = (0, express_1.Router)();
 exports.catalogRouter.get("/provincia/brands", catalog_controller_1.getProvinciaBrandsController);
 exports.catalogRouter.get("/provincia/models", catalog_controller_1.getProvinciaModelsController);
 exports.catalogRouter.get("/provincia/search", catalog_controller_1.searchProvinciaCatalogController);
+exports.catalogRouter.get("/san-cristobal/vehicle-version", catalog_controller_1.getSanCristobalVehicleVersionController);

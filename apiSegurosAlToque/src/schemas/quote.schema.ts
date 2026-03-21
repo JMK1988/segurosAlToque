@@ -19,7 +19,15 @@ export const multiQuoteSchema = z.object({
     vehicleTypeCode: z.string().min(1),
     isZeroKm: z.boolean(),
     insuredValue: z.number().positive(),
-    accessoriesAmount: z.number().min(0).optional()
+    accessoriesAmount: z.number().min(0).optional(),
+    infoAutoCode: z.string().optional(),
+    isNational: z.boolean().optional(),
+    vehicleNameHint: z.string().optional(),
+    categoryCode: z.string().optional(),
+    fuelTypeCode: z.string().optional(),
+    colorCode: z.string().optional(),
+    gnc: z.boolean().optional(),
+    automaticAdjustPercent: z.union([z.number(), z.string()]).optional()
   }),
   policy: z.object({
     startDateCode: z.string().optional(),
