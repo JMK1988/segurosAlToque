@@ -20,6 +20,7 @@ export interface MultiQuoteRequest {
     isZeroKm: boolean;
     insuredValue: number;
     accessoriesAmount?: number;
+    infoAutoCode?: string;
   };
   policy: {
     startDateCode?: string;

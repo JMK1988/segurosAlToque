@@ -6,10 +6,11 @@ const sanCristobal_connector_1 = require("../connectors/san-cristobal/sanCristob
 const env_1 = require("../config/env");
 function getActiveConnectors() {
     const activeConnectors = [new provincia_connector_1.ProvinciaConnector()];
-    const token = env_1.env.sanCristobal.authToken.trim();
-    const hasRealToken = token.length > 0 && !token.startsWith("<");
+    const user = env_1.env.sanCristobal.username.trim();
+    const pwd = env_1.env.sanCristobal.password;
+    const hasCredentials = user.length > 0 && !user.startsWith("YOUR_");
     // Keep San Cristobal optional while credentials are pending.
-    if (env_1.env.sanCristobal.baseUrl && hasRealToken) {
+    if (env_1.env.sanCristobal.baseUrl && hasCredentials) {
         activeConnectors.push(new sanCristobal_connector_1.SanCristobalConnector());
     }
     return activeConnectors;

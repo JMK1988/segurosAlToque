@@ -9,7 +9,7 @@ async function quoteAutoMultiController(req, res, next) {
         const payload = quote_schema_1.multiQuoteSchema.parse(req.body);
         const traceId = String(req.headers["x-trace-id"] ?? (0, crypto_1.randomUUID)());
         const result = await (0, multiQuote_service_1.quoteAutoMulti)(payload, traceId);
-        res.status(result.success ? 200 : 502).json(result);
+        res.status(200).json(result);
     }
     catch (error) {
         next(error);

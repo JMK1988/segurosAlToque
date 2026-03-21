@@ -253,6 +253,7 @@ export class ProvinciaCotizadorService {
         isZeroKm: false,
         insuredValue: 20000000,
         accessoriesAmount: 0,
+        infoAutoCode: params.datos.vehiculo.infoauto?.toString() || '',
       },
       policy: {
         startDateCode: 'E',

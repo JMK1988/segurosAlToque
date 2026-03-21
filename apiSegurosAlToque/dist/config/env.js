@@ -30,7 +30,8 @@ exports.env = {
     },
     sanCristobal: {
         baseUrl: process.env.SC_BASE_URL ?? "",
-        authToken: process.env.SC_AUTH_TOKEN ?? "",
+        username: process.env.SC_USERNAME ?? "",
+        password: process.env.SC_PASSWORD ?? "",
         quotePath: process.env.SC_QUOTE_PATH ?? "/b2b-gateway/api/v1/cotizaciones/autos"
     }
 };
@@ -42,5 +43,6 @@ function validateRequiredProductionEnv() {
     required("PROVINCIA_USERNAME");
     required("PROVINCIA_PASSWORD");
     required("SC_BASE_URL");
-    required("SC_AUTH_TOKEN");
+    required("SC_USERNAME");
+    required("SC_PASSWORD");
 }

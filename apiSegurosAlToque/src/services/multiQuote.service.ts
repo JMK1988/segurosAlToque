@@ -5,11 +5,12 @@ import { MultiQuoteRequest, MultiQuoteResponse, QuoteConnector } from "../types/
 
 function getActiveConnectors(): QuoteConnector[] {
   const activeConnectors: QuoteConnector[] = [new ProvinciaConnector()];
-  const token = env.sanCristobal.authToken.trim();
-  const hasRealToken = token.length > 0 && !token.startsWith("<");
+  const user = env.sanCristobal.username.trim();
+  const pwd = env.sanCristobal.password;
+  const hasCredentials = user.length > 0 && !user.startsWith("YOUR_");
 
   // Keep San Cristobal optional while credentials are pending.
-  if (env.sanCristobal.baseUrl && hasRealToken) {
+  if (env.sanCristobal.baseUrl && hasCredentials) {
     activeConnectors.push(new SanCristobalConnector());
   }
 

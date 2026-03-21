@@ -29,6 +29,7 @@ export class VehiculosService {
 
     /** Helper para extraer y filtrar marcas */
     private extractList(resp: any, filterCars = false): any[] {
+        console.log(`[VehiculosService] extractList() llamado. filterCars: ${filterCars}. Respuesta original:`, resp);
         let list: any[] = [];
         if (Array.isArray(resp)) {
             list = resp;
@@ -36,9 +37,26 @@ export class VehiculosService {
             list = resp?.value || resp?.Value || [];
         }
 
+        console.log(`[VehiculosService] extractList() lista extraída (longitud: ${list?.length || 0}):`, list);
+
         if (filterCars) {
-            // Solo dejamos las marcas que están en nuestra lista blanca de Argentina
-            return list.filter(m => this.MARCAS_AUTOS_ARGENTINA.has(m.toUpperCase()));
+            try {
+                // Solo dejamos las marcas que están en nuestra lista blanca de Argentina
+                const filtered = list.filter(m => {
+                    if (typeof m !== 'string') {
+                        console.warn('[VehiculosService] Advertencia en filtrado: el ítem no es un string:', m);
+                        // Si por algún motivo retornan objetos en lugar de strings, tratamos de extraer el posible campo 'nombre'.
+                        const nameToTest = m?.nombre || m?.name || '';
+                        return typeof nameToTest === 'string' && nameToTest !== '' && this.MARCAS_AUTOS_ARGENTINA.has(nameToTest.toUpperCase());
+                    }
+                    return this.MARCAS_AUTOS_ARGENTINA.has(m.toUpperCase());
+                });
+                console.log(`[VehiculosService] extractList() lista filtrada (longitud: ${filtered.length}):`, filtered);
+                return filtered;
+            } catch (error) {
+                console.error('[VehiculosService] extractList() Error al filtrar las marcas:', error);
+                return list;
+            }
         }
 
         return list;
@@ -47,11 +65,15 @@ export class VehiculosService {
     /** Marcas: Filtradas por mercado argentino */
     private readonly _marcasResource = resource({
         loader: async () => {
+            console.log('[VehiculosService] resource.loader -> Iniciando carga de marcas...');
             try {
                 const resp = await firstValueFrom(this.api.getMarcas());
-                return this.extractList(resp, true);
+                console.log('[VehiculosService] resource.loader -> getMarcas() response:', resp);
+                const brands = this.extractList(resp, true);
+                console.log('[VehiculosService] resource.loader -> Marcas procesadas finales:', brands);
+                return brands;
             } catch (err) {
-                console.error('[VehiculosService] Error cargando marcas:', err);
+                console.error('[VehiculosService] Error cargando marcas desde la API:', err);
                 return [];
             }
         }
@@ -62,8 +84,10 @@ export class VehiculosService {
         params: () => this._marcaSeleccionada(),
         loader: async ({ params: marca }) => {
             if (!marca) return [];
+            console.log(`[VehiculosService] resource.loader -> Iniciando carga de modelos para marca: ${marca}`);
             try {
                 const resp = await firstValueFrom(this.api.getModelos(marca));
+                console.log(`[VehiculosService] resource.loader -> getModelos(${marca}) response:`, resp);
                 return this.extractList(resp);
             } catch (err) {
                 console.error('[VehiculosService] Error cargando modelos:', err);
@@ -80,8 +104,10 @@ export class VehiculosService {
         }),
         loader: async ({ params }) => {
             if (!params.marca || !params.modelo) return [];
+            console.log(`[VehiculosService] resource.loader -> Iniciando carga de versiones para ${params.marca} - ${params.modelo}`);
             try {
                 const resp = await firstValueFrom(this.api.getVersiones(params.marca, params.modelo));
+                console.log(`[VehiculosService] resource.loader -> getVersiones(${params.marca}, ${params.modelo}) response:`, resp);
                 return this.extractList(resp);
             } catch (err) {
                 console.error('[VehiculosService] Error cargando versiones:', err);

@@ -44,6 +44,7 @@ export class CotizadorService {
     rus: this.initialResultado('rus', 'RUS', 'assets/logos/rus.png'),
     atm: this.initialResultado('atm', 'ATM Seguros', 'assets/logos/atm.png'),
     provincia: this.initialResultado('provincia', 'Provincia Seguros', 'assets/logos/provincia.png'),
+    san_cristobal: this.initialResultado('san_cristobal', 'San Cristobal', 'assets/logos/san_cristobal.png'),
   });
 
   readonly cargando = this._cargando.asReadonly();
@@ -239,54 +240,60 @@ export class CotizadorService {
           return this.provinciaService.cotizar(provinciaRequest);
         }),
         map((resp: ProvinciaMultiQuoteResponse) => {
+          console.log('--- RESTULTADO MULTIQUOTE COMPLETO (PROVINCIA + SAN CRISTOBAL) ---');
+          console.log(JSON.stringify(resp, null, 2));
+          console.log('------------------------------------------------------------------');
           const provinciaResult = resp.results?.find((item) => item.insurer === 'provincia');
-          if (!resp.success || !provinciaResult?.plans?.length) {
-            const errorProvincia = resp.errors?.find((item) => item.insurer === 'provincia');
-            throw new Error(
-              errorProvincia?.message ||
-                'Provincia Seguros no devolvió coberturas para los datos ingresados.',
-            );
-          }
-          return { ok: true, data: this._normalizarProvincia(provinciaResult) };
+          const scResult = resp.results?.find((item) => item.insurer === 'san_cristobal');
+
+          const buildOutput = (result: any, insurerCode: string, name: string) => {
+            if (!resp.success || !result?.plans?.length) {
+              const errorItem = resp.errors?.find((item) => item.insurer === insurerCode);
+              return { ok: false, error: errorItem?.message || `${name} no devolvió coberturas para los datos ingresados.` };
+            }
+            return { ok: true, data: this._normalizarProvincia(result) };
+          };
+
+          return {
+            provincia: buildOutput(provinciaResult, 'provincia', 'Provincia Seguros'),
+            san_cristobal: buildOutput(scResult, 'san_cristobal', 'San Cristobal')
+          };
         }),
         catchError((err) => {
-          console.error('[CotizadorService] Error Provincia:', err);
-          // Con el backend devolviendo siempre 200, el error viene del map() como Error estándar.
-          // Casos especiales por código de error del conector backend.
+          console.error('[CotizadorService] Error MultiQuote Backend:', err);
           const msg =
             err instanceof Error
               ? err.message
-              : err?.error?.message || err?.message || 'Error al conectar con la aseguradora Provincia.';
-          return of({ ok: false, error: msg });
+              : err?.error?.message || err?.message || 'Error al conectar con la aseguradora multi-broker.';
+          return of({
+            provincia: { ok: false, error: msg },
+            san_cristobal: { ok: false, error: msg }
+          });
         }),
       );
 
-    forkJoin({ ma: ma$, rus: rus$, atm: atm$, provincia: provincia$ }).subscribe(
-      ({ ma, rus, atm, provincia }) => {
+    forkJoin({ ma: ma$, rus: rus$, atm: atm$, multi: provincia$ }).subscribe(
+      ({ ma, rus, atm, multi }) => {
       console.timeEnd('[CotizadorService] Tiempo total cotización');
       this._actualizarAseguradora('ma', (prev) => {
-        if (!ma.ok) {
-          return { ...prev, estado: 'error', error: (ma as any).error };
-        }
+        if (!ma.ok) return { ...prev, estado: 'error', error: (ma as any).error };
         return { ...prev, ...(ma as any).data, estado: 'ok' };
       });
       this._actualizarAseguradora('rus', (prev) => {
-        if (!rus.ok) {
-          return { ...prev, estado: 'error', error: (rus as any).error };
-        }
+        if (!rus.ok) return { ...prev, estado: 'error', error: (rus as any).error };
         return { ...prev, ...(rus as any).data, estado: 'ok' };
       });
       this._actualizarAseguradora('atm', (prev) => {
-        if (!atm.ok) {
-          return { ...prev, estado: 'error', error: (atm as any).error };
-        }
+        if (!atm.ok) return { ...prev, estado: 'error', error: (atm as any).error };
         return { ...prev, ...(atm as any).data, estado: 'ok' };
       });
       this._actualizarAseguradora('provincia', (prev) => {
-        if (!provincia.ok) {
-          return { ...prev, estado: 'error', error: (provincia as any).error };
-        }
-        return { ...prev, ...(provincia as any).data, estado: 'ok' };
+        if (!multi.provincia.ok) return { ...prev, estado: 'error', error: multi.provincia.error };
+        return { ...prev, ...(multi.provincia as any).data, estado: 'ok' };
+      });
+      this._actualizarAseguradora('san_cristobal', (prev) => {
+        if (!multi.san_cristobal.ok) return { ...prev, estado: 'error', error: multi.san_cristobal.error };
+        return { ...prev, ...(multi.san_cristobal as any).data, estado: 'ok' };
       });
       this._cargando.set(false);
       },

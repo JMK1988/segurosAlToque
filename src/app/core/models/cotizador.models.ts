@@ -5,7 +5,7 @@
 // ============================================================
 
 /** Aseguradoras integradas */
-export type AseguradoraId = 'ma' | 'rus' | 'atm' | 'provincia'; // 'ma' = Mercantil Andina, 'rus' = RUS, 'atm' = ATM Seguros, 'provincia' = Provincia Seguros
+export type AseguradoraId = 'ma' | 'rus' | 'atm' | 'provincia' | 'san_cristobal'; // 'ma' = Mercantil Andina, 'rus' = RUS, 'atm' = ATM Seguros, 'provincia' = Provincia Seguros
 
 /** Estado de carga por aseguradora */
 export type EstadoCotizacion = 'idle' | 'cargando' | 'ok' | 'error';
