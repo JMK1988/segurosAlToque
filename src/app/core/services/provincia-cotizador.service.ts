@@ -9,7 +9,7 @@ import {
 } from '../models/provincia-cotizador.models';
 import { environment } from '../../../environments/environment';
 
-const API_BASE = environment.apiBrokerBaseUrl;
+const API_BASE = environment.apiMulticotizadorBaseUrl;
 const PROVINCIA_DEFAULT_BRAND_CODE = 'TOY';
 const PROVINCIA_DEFAULT_MODEL_CODE = '045307';
 

@@ -1,9 +1,9 @@
 /**
- * Producción: mismo patrón que dev — `/api-proxy` y en Netlify el redirect a Railway
- * (ver `netlify.toml`). Así no hace falta CORS en la API para el front.
- * Si el sitio no tiene proxy (otro hosting), poné la URL absoluta de la API y habilitá CORS allí.
+ * Netlify: `netlify.toml` reescribe `/api-proxy/*` y `/api-broker/*` a cada host.
+ * Si el hosting no soporta proxy, podés poner acá URLs absolutas y habilitar CORS en cada API.
  */
 export const environment = {
   production: true,
-  apiBrokerBaseUrl: '/api-proxy',
+  apiMulticotizadorBaseUrl: '/api-proxy',
+  apiCotizacionBrokerBaseUrl: '/api-broker',
 };

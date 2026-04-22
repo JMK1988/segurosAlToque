@@ -10,10 +10,10 @@ import {
 } from '../models/ma-cotizador.models';
 import { environment } from '../../../environments/environment';
 
-const BASE_URL = environment.apiBrokerBaseUrl;
+const BASE_URL = environment.apiCotizacionBrokerBaseUrl;
 
 /**
- * Servicio de bajo nivel para la API de SegurosAlToque.
+ * Servicio de bajo nivel para el broker de cotización (host `apiCotizacionBrokerBaseUrl`).
  * Cubre los vehículos (InfoAuto) y cotización de Mercantil Andina.
  */
 @Injectable({ providedIn: 'root' })

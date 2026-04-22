@@ -1,10 +1,12 @@
 /**
  * Desarrollo (`ng serve` + `proxy.conf.json`).
- * Usá `/api-proxy` para que las llamadas sean mismo-origen (`localhost:4200`) y el proxy
- * reenvíe a Railway; si no, el navegador bloquea por CORS.
- * @see broker-api-host.ts para el host real detrás del proxy.
+ * Dos backs: `apiMulticotizadorBaseUrl` (Railway, `/api/v1/*`) y
+ * `apiCotizacionBrokerBaseUrl` (MA/RUS/ATM, `/api/MA` etc.); ver `api-backends.ts`.
  */
 export const environment = {
   production: false,
-  apiBrokerBaseUrl: '/api-proxy',
+  /** Provincia + San Cristóbal (`apisegurosaltoque-production-be2c` en Railway). */
+  apiMulticotizadorBaseUrl: '/api-proxy',
+  /** MA, RUS, ATM, Mercantil Andina (`apisegurosaltoque` en Railway). */
+  apiCotizacionBrokerBaseUrl: '/api-broker',
 };

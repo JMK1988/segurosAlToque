@@ -1,11 +1,20 @@
 {
-    "/api-proxy": {
-        "target": "https://apisegurosaltoque.up.railway.app",
-        "changeOrigin": true,
-        "secure": true,
-        "pathRewrite": {
-            "^/api-proxy": ""
-        },
-        "logLevel": "info"
-    }
+  "/api-proxy": {
+    "target": "https://apisegurosaltoque-production-be2c.up.railway.app",
+    "changeOrigin": true,
+    "secure": true,
+    "pathRewrite": {
+      "^/api-proxy": ""
+    },
+    "logLevel": "info"
+  },
+  "/api-broker": {
+    "target": "https://apisegurosaltoque.up.railway.app",
+    "changeOrigin": true,
+    "secure": true,
+    "pathRewrite": {
+      "^/api-broker": ""
+    },
+    "logLevel": "info"
+  }
 }

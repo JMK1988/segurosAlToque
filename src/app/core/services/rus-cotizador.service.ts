@@ -4,7 +4,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { RusCotizacionRequestDto, RusCotizacionResponse } from '../models/rus-cotizador.models';
 import { environment } from '../../../environments/environment';
 
-const BASE_URL = environment.apiBrokerBaseUrl;
+const BASE_URL = environment.apiCotizacionBrokerBaseUrl;
 
 /**
  * Servicio de integracion para RUS (Rio Uruguay Seguros).

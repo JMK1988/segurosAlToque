@@ -8,11 +8,11 @@ import {
 } from '../models/atm-cotizador.models';
 import { environment } from '../../../environments/environment';
 
-const BASE_URL = environment.apiBrokerBaseUrl;
+const BASE_URL = environment.apiCotizacionBrokerBaseUrl;
 
 /**
  * Servicio de integración para ATM Seguros.
- * El backend (api-segurosaltoque.onrender.com) traduce el SOAP/XML de ATM
+ * El broker (`apiCotizacionBrokerBaseUrl`, Railway `apisegurosaltoque`) traduce el SOAP/XML de ATM
  * y expone endpoints REST que devuelven JSON.
  *
  * Flujo de 2 pasos:

@@ -1,6 +1,6 @@
 // ============================================================
 // MODELOS - API de Vehículos (InfoAuto) - SegurosAlToque
-// Base URL: https://api-segurosaltoque.onrender.com
+// Base: environment.apiCotizacionBrokerBaseUrl (MA / RUS / ATM en Railway)
 // ============================================================
 
 /** Item devuelto por GET /api/MA/versiones */
