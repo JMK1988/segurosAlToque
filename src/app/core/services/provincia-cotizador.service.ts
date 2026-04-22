@@ -74,19 +74,22 @@ const PROVINCIA_CATALOG: Record<string, ProvinciaBrandCatalog> = {
 @Injectable({ providedIn: 'root' })
 export class ProvinciaCotizadorService {
   private readonly http = inject(HttpClient);
-  private readonly headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+  /** POST JSON */
+  private readonly postHeaders = { Accept: 'application/json', 'Content-Type': 'application/json' };
+  /** GET: sin `Content-Type` (algunos proxies / WAF rechazan GET + application/json). */
+  private readonly getHeaders = { Accept: 'application/json' };
 
   cotizar(payload: ProvinciaMultiQuoteRequest): Observable<ProvinciaMultiQuoteResponse> {
     return this.http.post<ProvinciaMultiQuoteResponse>(
       `${API_BASE}/api/v1/quotes/auto/multi`,
       payload,
-      { headers: this.headers },
+      { headers: this.postHeaders },
     );
   }
 
   getBrands(): Observable<ProvinciaBrandsResponse> {
     return this.http.get<ProvinciaBrandsResponse>(`${API_BASE}/api/v1/catalog/provincia/brands`, {
-      headers: this.headers,
+      headers: this.getHeaders,
     });
   }
 
@@ -95,7 +98,7 @@ export class ProvinciaCotizadorService {
       `${API_BASE}/api/v1/catalog/provincia/models`,
       {
         params: { brandCode, anio },
-        headers: this.headers,
+        headers: this.getHeaders,
       },
     );
   }
@@ -105,7 +108,7 @@ export class ProvinciaCotizadorService {
       `${API_BASE}/api/v1/catalog/provincia/search`,
       {
         params: { query },
-        headers: this.headers,
+        headers: this.getHeaders,
       },
     );
   }

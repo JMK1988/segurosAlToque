@@ -8,10 +8,7 @@ import {
   DatosCotizacion,
   ResultadoAseguradora,
 } from '../models/cotizador.models';
-import { MaProductoResultado, MercantilAndinaResponse } from '../models/ma-cotizador.models';
-import { MaCotizadorService } from './ma-cotizador.service';
-import { RusCotizacionResponse } from '../models/rus-cotizador.models';
-import { RusCotizadorService } from './rus-cotizador.service';
+import { MaProductoResultado } from '../models/ma-cotizador.models';
 import { AtmCoberturaDto, AtmCotizacionResponse } from '../models/atm-cotizador.models';
 import { AtmCotizadorService } from './atm-cotizador.service';
 import { ProvinciaMultiQuoteResponse } from '../models/provincia-cotizador.models';
@@ -23,8 +20,7 @@ import { ProvinciaCotizadorService } from './provincia-cotizador.service';
  */
 @Injectable({ providedIn: 'root' })
 export class CotizadorService {
-  private readonly maService = inject(MaCotizadorService);
-  private readonly rusService = inject(RusCotizadorService);
+
   private readonly atmService = inject(AtmCotizadorService);
   private readonly provinciaService = inject(ProvinciaCotizadorService);
 
@@ -92,86 +88,7 @@ export class CotizadorService {
 
     this._actualizarTodas((r) => ({ ...r, estado: 'cargando', coberturas: [], error: undefined }));
 
-    const maRequest = this.maService.buildRequest({
-      codigoPostal: datos.localidad.codigo_postal,
-      infoauto: datos.vehiculo.infoauto,
-      anio: datos.vehiculo.anio,
-      uso: datos.vehiculo.uso,
-      gnc: datos.vehiculo.gnc,
-      rastreo: datos.vehiculo.rastreo,
-      cuotas: datos.cuotas,
-      tipoPago: datos.tipo_pago,
-    });
-    console.log('[CotizadorService] Request MA JSON:', JSON.stringify(maRequest, null, 2));
 
-    const ma$ = this.maService.cotizar(maRequest).pipe(
-      map((resp: any) => {
-        console.timeLog(
-          '[CotizadorService] Tiempo total cotización',
-          'Respuesta recibida de la API',
-        );
-
-        // Si la aseguradora responde pero con un estado de error (ej: CONFLICT)
-        if (resp.estado && resp.estado !== 'OK') {
-          const errorMsg =
-            resp.mensaje ||
-            (resp.errores && resp.errores[0]) ||
-            'Error en la consulta a la aseguradora.';
-          throw new Error(errorMsg);
-        }
-
-        if (!resp.resultado) {
-          throw new Error('La aseguradora no devolvió resultados para este vehículo.');
-        }
-
-        return { ok: true, data: this._normalizarMa(resp) };
-      }),
-      catchError((err) => {
-        console.error('[CotizadorService] Error MA:', err);
-        const msg =
-          err instanceof Error
-            ? err.message
-            : err?.error?.mensaje || 'Error al conectar con la aseguradora MA.';
-        return of({ ok: false, error: msg });
-      }),
-    );
-
-    const rus$ = this.rusService.versionToCodia(String(datos.vehiculo.infoauto)).pipe(
-      switchMap((codia) => {
-        const codiaRUS = codia ?? datos.vehiculo.infoauto;
-        const rusRequest = this.rusService.buildRequest({
-          codigoPostal: datos.localidad.codigo_postal,
-          infoauto: codiaRUS,
-          anio: datos.vehiculo.anio,
-          uso: datos.vehiculo.uso,
-          gnc: datos.vehiculo.gnc,
-          rastreo: datos.vehiculo.rastreo,
-          cuotas: datos.cuotas,
-        });
-        console.log('[CotizadorService] RUS codia resuelto:', codiaRUS, codia != null ? '(mapeo)' : '(fallback infoauto)');
-        console.log('[CotizadorService] Request RUS JSON:', JSON.stringify(rusRequest, null, 2));
-        return this.rusService.cotizar(rusRequest);
-      }),
-      map((resp: any) => {
-        if (resp && resp.cantidadTotal > 0 && resp.dtoList) {
-          return { ok: true, data: this._normalizarRus(resp) };
-        }
-        throw new Error('La aseguradora RUS no devolvio resultados.');
-      }),
-      catchError((err) => {
-        console.error('[CotizadorService] Error RUS:', err);
-        const backendMsg =
-          err?.error?.message ||
-          err?.error?.mensaje ||
-          err?.error?.title ||
-          err?.message;
-        const msg =
-          typeof backendMsg === 'string' && backendMsg.length > 0
-            ? `RUS: ${backendMsg}`
-            : 'Error al conectar con la aseguradora RUS.';
-        return of({ ok: false, error: msg });
-      }),
-    );
 
     // ATM necesita el nombre del vehículo para buscar sus códigos internos
     const nombreVehiculo = datos.nombreVehiculo || '';
@@ -236,23 +153,27 @@ export class CotizadorService {
           return this.provinciaService.cotizar(provinciaRequest);
         }),
         map((resp: ProvinciaMultiQuoteResponse) => {
-          console.log('--- RESTULTADO MULTIQUOTE COMPLETO (PROVINCIA + SAN CRISTOBAL) ---');
+          console.log('--- RESTULTADO MULTIQUOTE COMPLETO ---');
           console.log(JSON.stringify(resp, null, 2));
-          console.log('------------------------------------------------------------------');
+          console.log('--------------------------------------');
           const provinciaResult = resp.results?.find((item) => item.insurer === 'provincia');
           const scResult = resp.results?.find((item) => item.insurer === 'san_cristobal');
+          const maResult = resp.results?.find((item) => item.insurer === 'mercantil_andina');
+          const rusResult = resp.results?.find((item) => item.insurer === 'rus');
 
-          const buildOutput = (result: any, insurerCode: string, name: string) => {
+          const buildOutput = (result: any, insurerCode: string, name: string, normalizador: any) => {
             if (!resp.success || !result?.plans?.length) {
               const errorItem = resp.errors?.find((item) => item.insurer === insurerCode);
               return { ok: false, error: errorItem?.message || `${name} no devolvió coberturas para los datos ingresados.` };
             }
-            return { ok: true, data: this._normalizarProvincia(result) };
+            return { ok: true, data: normalizador(result) };
           };
 
           return {
-            provincia: buildOutput(provinciaResult, 'provincia', 'Provincia Seguros'),
-            san_cristobal: buildOutput(scResult, 'san_cristobal', 'San Cristobal')
+            provincia: buildOutput(provinciaResult, 'provincia', 'Provincia Seguros', (r: any) => this._normalizarProvincia(r)),
+            san_cristobal: buildOutput(scResult, 'san_cristobal', 'San Cristobal', (r: any) => this._normalizarProvincia(r)),
+            ma: buildOutput(maResult, 'mercantil_andina', 'Mercantil Andina', (r: any) => this._normalizarMa(r)),
+            rus: buildOutput(rusResult, 'rus', 'RUS', (r: any) => this._normalizarRus(r))
           };
         }),
         catchError((err) => {
@@ -263,21 +184,23 @@ export class CotizadorService {
               : err?.error?.message || err?.message || 'Error al conectar con la aseguradora multi-broker.';
           return of({
             provincia: { ok: false, error: msg },
-            san_cristobal: { ok: false, error: msg }
+            san_cristobal: { ok: false, error: msg },
+            ma: { ok: false, error: msg },
+            rus: { ok: false, error: msg }
           });
         }),
       );
 
-    forkJoin({ ma: ma$, rus: rus$, atm: atm$, multi: provincia$ }).subscribe(
-      ({ ma, rus, atm, multi }) => {
+    forkJoin({ atm: atm$, multi: provincia$ }).subscribe(
+      ({ atm, multi }) => {
       console.timeEnd('[CotizadorService] Tiempo total cotización');
       this._actualizarAseguradora('ma', (prev) => {
-        if (!ma.ok) return { ...prev, estado: 'error', error: (ma as any).error };
-        return { ...prev, ...(ma as any).data, estado: 'ok' };
+        if (!multi.ma.ok) return { ...prev, estado: 'error', error: multi.ma.error };
+        return { ...prev, ...(multi.ma as any).data, estado: 'ok' };
       });
       this._actualizarAseguradora('rus', (prev) => {
-        if (!rus.ok) return { ...prev, estado: 'error', error: (rus as any).error };
-        return { ...prev, ...(rus as any).data, estado: 'ok' };
+        if (!multi.rus.ok) return { ...prev, estado: 'error', error: multi.rus.error };
+        return { ...prev, ...(multi.rus as any).data, estado: 'ok' };
       });
       this._actualizarAseguradora('atm', (prev) => {
         if (!atm.ok) return { ...prev, estado: 'error', error: (atm as any).error };
@@ -379,33 +302,30 @@ export class CotizadorService {
     return base;
   }
 
-  private _normalizarMa(resp: MercantilAndinaResponse): Partial<ResultadoAseguradora> {
-    const coberturas: CoberturaResultado[] = (resp.resultado || [])
-      .filter((p) => !p.error)
-      .map((p: MaProductoResultado): CoberturaResultado => {
+  private _normalizarMa(result: ProvinciaMultiQuoteResponse['results'][number]): Partial<ResultadoAseguradora> {
+    const coberturas: CoberturaResultado[] = (result.plans || [])
+      .map((plan): CoberturaResultado => {
+        const p: MaProductoResultado = plan.rawResponse || {};
         const prod = p.producto?.toUpperCase() || '';
         const tieneGranizo = p.adicional?.granizo || prod === 'M PLUS' || prod.startsWith('D');
 
-        // Lógica de inspección mejorada
-        // Si el plan es mayor a RC (A) y no es 0km, suele requerir inspección.
-        // Si la aseguradora trae opciones de inspección, es un "Si" rotundo.
         const inspeccionApi =
           p.inspeccion?.opciones?.some((o) => o.id !== null && o.id !== '0') || false;
         const requiereInspeccion =
-          prod !== 'A' && (inspeccionApi || p.inspeccion?.opciones?.length > 0);
+          prod !== 'A' && (inspeccionApi || (p.inspeccion?.opciones && p.inspeccion?.opciones?.length > 0));
 
         return {
-          codigoProducto: p.producto,
-          descripcion: this._humanizarNombre(p),
-          premio: p.costo,
+          codigoProducto: p.producto || plan.planId,
+          descripcion: p.producto ? this._humanizarNombre(p) : plan.planName,
+          premio: plan.monthlyPremium || p.costo || 0,
           prima: p.desglose?.total?.prima || 0,
           iva: p.desglose?.total?.iva || 0,
-          cantidadCuotas: p.cantidad_cuotas,
-          importeCuota: p.desglose?.cuotas?.[0]?.cuota ?? 0,
+          cantidadCuotas: p.cantidad_cuotas || 1,
+          importeCuota: p.desglose?.cuotas?.[0]?.cuota ?? (plan.monthlyPremium || 0),
           granizo: tieneGranizo,
           requiereInspeccion: requiereInspeccion,
           beneficios: this._getBeneficios(prod),
-          codigoInterno: p.codigo_producto,
+          codigoInterno: p.codigo_producto || 0,
           franquicia: p.franquicia || 0,
         };
       })
@@ -413,11 +333,11 @@ export class CotizadorService {
 
     return {
       coberturas,
-      fechaCotizacion: resp.fecha_cotizacion,
+      fechaCotizacion: result.quoteDate || new Date().toISOString(),
       vehiculo: {
-        nombre: resp.vehiculo.nombre,
-        valor: resp.vehiculo.valor,
-        sumaAsegurada: resp.suma_asegurada,
+        nombre: 'Vehículo Cotizado',
+        valor: 0,
+        sumaAsegurada: result.plans?.[0]?.rawResponse?.suma_asegurada || 0,
       },
     };
   }
@@ -590,9 +510,10 @@ export class CotizadorService {
     return [...base, ...extras];
   }
 
-  private _normalizarRus(resp: RusCotizacionResponse): Partial<ResultadoAseguradora> {
-    const coberturas: CoberturaResultado[] = (resp.dtoList || [])
-      .map((p) => {
+  private _normalizarRus(result: ProvinciaMultiQuoteResponse['results'][number]): Partial<ResultadoAseguradora> {
+    const coberturas: CoberturaResultado[] = (result.plans || [])
+      .map((plan) => {
+        const p = plan.rawResponse || {};
         const tieneGranizo =
           p.descripcionCasco?.toLowerCase().includes('granizo') ||
           p.detalleCoberturaCasco?.toLowerCase().includes('granizo') ||
@@ -603,7 +524,7 @@ export class CotizadorService {
         if (p.paisesLimitrofes === 'SI') baseBeneficios.push('Cobertura Países Limítrofes');
 
         // Normalizamos la descripción para el filtro
-        let descFiltro = p.descripcionComercial || 'RUS Seguros';
+        let descFiltro = p.descripcionComercial || plan.planName || 'RUS Seguros';
         const prod = p.codigoCasco?.toUpperCase() || '';
 
         if (p.codigoCasco) {
@@ -627,12 +548,12 @@ export class CotizadorService {
         }
 
         // RUS devuelve totales por el periodo semestral, dividimos por 6 para obtener el valor mensual
-        const valorMensualPremio = Number(((p.premio || 0) / 6).toFixed(2));
+        const valorMensualPremio = Number(((p.premio || plan.monthlyPremium || 0) / 6).toFixed(2));
         const valorMensualPrima = Number(((p.prima || 0) / 6).toFixed(2));
         const valorMensualIva = Number(((p.iva || 0) / 6).toFixed(2));
 
         return {
-          codigoProducto: p.codigoCasco || p.codigoRC,
+          codigoProducto: p.codigoCasco || p.codigoRC || plan.planId,
           descripcion: descFiltro,
           premio: valorMensualPremio,
           prima: valorMensualPrima,
@@ -650,11 +571,11 @@ export class CotizadorService {
 
     return {
       coberturas,
-      fechaCotizacion: new Date().toISOString(),
+      fechaCotizacion: result.quoteDate || new Date().toISOString(),
       vehiculo: {
         nombre: 'Vehículo Cotizado',
-        valor: resp.dtoList[0]?.sumaAsegurada || 0,
-        sumaAsegurada: resp.dtoList[0]?.sumaAsegurada || 0,
+        valor: result.plans?.[0]?.rawResponse?.sumaAsegurada || 0,
+        sumaAsegurada: result.plans?.[0]?.rawResponse?.sumaAsegurada || 0,
       },
     };
   }

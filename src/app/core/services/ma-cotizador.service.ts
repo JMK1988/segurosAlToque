@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import {
-  MercantilAndinaRequestDto,
-  MercantilAndinaResponse,
   VehicleBrandsResponse,
   VehicleModelsResponse,
   VehicleVersionsResponse,
@@ -46,48 +45,4 @@ export class MaCotizadorService {
     });
   }
 
-  // ── Cotización MA ─────────────────────────────────────────
-
-  /** POST /api/Cotizacion/mercantilandina/test */
-  cotizar(request: MercantilAndinaRequestDto): Observable<MercantilAndinaResponse> {
-    return this.http.post<MercantilAndinaResponse>(
-      `${BASE_URL}/api/Cotizacion/mercantilandina/test`,
-      request,
-      { headers: this.headers },
-    );
-  }
-
-  /** Helper: arma el request con defaults razonables */
-  buildRequest(params: {
-    codigoPostal: number;
-    infoauto: number;
-    anio: number;
-    uso?: number;
-    gnc?: boolean;
-    rastreo?: number;
-    cuotas?: number;
-    tipoPago?: 'D' | 'C';
-    ajusteSuma?: number;
-    comision?: number;
-    iva?: number;
-  }): MercantilAndinaRequestDto {
-    return {
-      localidad: { codigo_postal: params.codigoPostal },
-      vehiculo: {
-        infoauto: params.infoauto,
-        anio: params.anio,
-        uso: params.uso ?? 1,
-        gnc: params.gnc ?? false,
-        rastreo: params.rastreo ?? 0,
-      },
-      comision: params.comision ?? 20,
-      bonificacion: 0,
-      periodo: 1,
-      cuotas: params.cuotas ?? 1,
-      pago: { tipo_pago: params.tipoPago ?? 'D' },
-      ajuste_suma: params.ajusteSuma ?? 25,
-      iva: params.iva ?? 5,
-      desglose: true,
-    };
-  }
 }

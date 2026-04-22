@@ -42,17 +42,18 @@ export interface ProvinciaQuotePlan {
   monthlyPremium?: number;
   annualReferencePremium?: number;
   currency: string;
+  rawResponse?: any;
 }
 
 export interface ProvinciaQuoteResult {
-  insurer: 'provincia' | 'san_cristobal';
+  insurer: 'provincia' | 'san_cristobal' | 'mercantil_andina' | 'rus';
   quoteNumber?: string;
   quoteDate?: string;
   plans: ProvinciaQuotePlan[];
 }
 
 export interface ProvinciaQuoteError {
-  insurer: 'provincia' | 'san_cristobal';
+  insurer: 'provincia' | 'san_cristobal' | 'mercantil_andina' | 'rus';
   code: string;
   message: string;
 }
