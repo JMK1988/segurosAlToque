@@ -6,8 +6,9 @@ import {
   AtmCotizacionRequestDto,
   AtmCotizacionResponse,
 } from '../models/atm-cotizador.models';
+import { environment } from '../../../environments/environment';
 
-const BASE_URL = '/api-proxy';
+const BASE_URL = environment.apiBrokerBaseUrl;
 
 /**
  * Servicio de integración para ATM Seguros.

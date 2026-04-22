@@ -138,21 +138,17 @@ export class CotizadorService {
 
     const rus$ = this.rusService.versionToCodia(String(datos.vehiculo.infoauto)).pipe(
       switchMap((codia) => {
-        if (!codia) {
-          throw new Error(
-            'RUS: no se pudo mapear la version seleccionada al codigo CODIA requerido.',
-          );
-        }
+        const codiaRUS = codia ?? datos.vehiculo.infoauto;
         const rusRequest = this.rusService.buildRequest({
           codigoPostal: datos.localidad.codigo_postal,
-          infoauto: codia,
+          infoauto: codiaRUS,
           anio: datos.vehiculo.anio,
           uso: datos.vehiculo.uso,
           gnc: datos.vehiculo.gnc,
           rastreo: datos.vehiculo.rastreo,
           cuotas: datos.cuotas,
         });
-        console.log('[CotizadorService] RUS codia resuelto:', codia);
+        console.log('[CotizadorService] RUS codia resuelto:', codiaRUS, codia != null ? '(mapeo)' : '(fallback infoauto)');
         console.log('[CotizadorService] Request RUS JSON:', JSON.stringify(rusRequest, null, 2));
         return this.rusService.cotizar(rusRequest);
       }),

@@ -1,8 +1,8 @@
-# Proxy para la API (evita CORS en producción)
-# /api-proxy/* → https://api-segurosaltoque.onrender.com/*
+# Proxy para la API (evita CORS: el navegador pega al mismo origen)
+# /api-proxy/* → Railway (Broker MA, RUS, ATM)
 [[redirects]]
   from = "/api-proxy/*"
-  to = "https://api-segurosaltoque.onrender.com/:splat"
+  to = "https://apisegurosaltoque.up.railway.app/:splat"
   status = 200
   force = true
 

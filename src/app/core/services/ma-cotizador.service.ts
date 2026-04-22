@@ -8,8 +8,9 @@ import {
   VehicleModelsResponse,
   VehicleVersionsResponse,
 } from '../models/ma-cotizador.models';
+import { environment } from '../../../environments/environment';
 
-const BASE_URL = '/api-proxy';
+const BASE_URL = environment.apiBrokerBaseUrl;
 
 /**
  * Servicio de bajo nivel para la API de SegurosAlToque.

@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 
 import { DatosCotizacion } from '../models/cotizador.models';
 import {
   ProvinciaMultiQuoteRequest,
   ProvinciaMultiQuoteResponse,
 } from '../models/provincia-cotizador.models';
+import { environment } from '../../../environments/environment';
 
-const BASE_URL = '/api-proxy';
-const LOCAL_MULTIQUOTE_URL = 'http://localhost:3000';
+const API_BASE = environment.apiBrokerBaseUrl;
 const PROVINCIA_DEFAULT_BRAND_CODE = 'TOY';
 const PROVINCIA_DEFAULT_MODEL_CODE = '045307';
 
@@ -75,58 +75,24 @@ const PROVINCIA_CATALOG: Record<string, ProvinciaBrandCatalog> = {
 export class ProvinciaCotizadorService {
   private readonly http = inject(HttpClient);
   private readonly headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
-  private preferLocal = true;
 
   cotizar(payload: ProvinciaMultiQuoteRequest): Observable<ProvinciaMultiQuoteResponse> {
-    if (this.preferLocal) {
-      return this.http
-        .post<ProvinciaMultiQuoteResponse>(`${LOCAL_MULTIQUOTE_URL}/api/v1/quotes/auto/multi`, payload, {
-          headers: this.headers,
-        })
-        .pipe(
-          catchError((err) => {
-            // Si la API local no está disponible, fallback al backend proxy.
-            if (err?.status !== 0 && err?.status !== 404) {
-              return throwError(() => err);
-            }
-            this.preferLocal = false;
-            return this.http.post<ProvinciaMultiQuoteResponse>(
-              `${BASE_URL}/api/v1/quotes/auto/multi`,
-              payload,
-              { headers: this.headers },
-            );
-          }),
-        );
-    }
-
-    return this.http
-      .post<ProvinciaMultiQuoteResponse>(`${BASE_URL}/api/v1/quotes/auto/multi`, payload, {
-        headers: this.headers,
-      })
-      .pipe(
-        catchError((err) => {
-          if (err?.status !== 404) {
-            return throwError(() => err);
-          }
-          this.preferLocal = true;
-          return this.http.post<ProvinciaMultiQuoteResponse>(
-            `${LOCAL_MULTIQUOTE_URL}/api/v1/quotes/auto/multi`,
-            payload,
-            { headers: this.headers },
-          );
-        }),
-      );
+    return this.http.post<ProvinciaMultiQuoteResponse>(
+      `${API_BASE}/api/v1/quotes/auto/multi`,
+      payload,
+      { headers: this.headers },
+    );
   }
 
   getBrands(): Observable<ProvinciaBrandsResponse> {
-    return this.http.get<ProvinciaBrandsResponse>(`${LOCAL_MULTIQUOTE_URL}/api/v1/catalog/provincia/brands`, {
+    return this.http.get<ProvinciaBrandsResponse>(`${API_BASE}/api/v1/catalog/provincia/brands`, {
       headers: this.headers,
     });
   }
 
   getModels(brandCode: string, anio: string): Observable<ProvinciaModelsResponse> {
     return this.http.get<ProvinciaModelsResponse>(
-      `${LOCAL_MULTIQUOTE_URL}/api/v1/catalog/provincia/models`,
+      `${API_BASE}/api/v1/catalog/provincia/models`,
       {
         params: { brandCode, anio },
         headers: this.headers,
@@ -136,7 +102,7 @@ export class ProvinciaCotizadorService {
 
   searchCatalog(query: string): Observable<ProvinciaSearchResponse> {
     return this.http.get<ProvinciaSearchResponse>(
-      `${LOCAL_MULTIQUOTE_URL}/api/v1/catalog/provincia/search`,
+      `${API_BASE}/api/v1/catalog/provincia/search`,
       {
         params: { query },
         headers: this.headers,

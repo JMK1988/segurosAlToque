@@ -1,6 +1,6 @@
 {
     "/api-proxy": {
-        "target": "https://api-segurosaltoque.onrender.com",
+        "target": "https://apisegurosaltoque.up.railway.app",
         "changeOrigin": true,
         "secure": true,
         "pathRewrite": {

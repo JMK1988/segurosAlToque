@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { RusCotizacionRequestDto, RusCotizacionResponse } from '../models/rus-cotizador.models';
+import { environment } from '../../../environments/environment';
 
-const BASE_URL = '/api-proxy';
+const BASE_URL = environment.apiBrokerBaseUrl;
 
 /**
  * Servicio de integracion para RUS (Rio Uruguay Seguros).
@@ -33,6 +34,8 @@ export class RusCotizadorService {
           if (resp && typeof resp.codia === 'number') return resp.codia;
           return null;
         }),
+        // Si el endpoint no está desplegado o no hay mapeo, el front usa infoauto como codia.
+        catchError(() => of(null)),
       );
   }
 
